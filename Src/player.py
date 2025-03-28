@@ -18,6 +18,7 @@ class Player(pg.sprite.Sprite) :
         # self.image = self.player_run[self.player_index]
         #
         # isso irá permitir animar os sprites
+        self.speed = velocidade
         self.image = pg.image.load("c:/users/ianda/downloads/image-removebg-preview.png")
         self.rect = self.image.get_rect(midbottom = (100,200))
         self.inventario = {'chave': 0, 'estrela': 0, 'moedas': 0}
@@ -30,9 +31,9 @@ class Player(pg.sprite.Sprite) :
             if # player pisando em um superficie :
                 self.gravity = -20
         if keys[pg.K_a] :
-            self.rect.x -= 5
+            self.rect.x -= self.speed
         if keys[pg.K_d] :
-            self.rect.x += 5
+            self.rect.x += self.speed
         if keys[pg.K_SPACE] :
             # ataque
         if keys[pg.K_l] :
