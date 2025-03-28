@@ -3,10 +3,10 @@
 ## 🏆 Equipe
 - Arthur Torres <atl> - [@github](https://github.com/integrante1)
 - Ian Cerqueira <idhac> - [@github](https://github.com/frogu1)
-- Ítalo Cauã <icbo> - [@github](https://github.com/integrante3)
+- Ítalo Cauã <icbo> - [@github](https://github.com/italo-Barbosa)
 - Maycon Otávio <mobs> - [@github](https://github.com/m4yconn)
-- Ryan Souza <rss15> - [@github](https://github.com/integrante5)
-- Thiago Alves <tam6> - [@github](https://github.com/integrante6)
+- Ryan Souza <rss15> - [@github](https://github.com/RyanRss15)
+- Thiago Alves <tam6> - [@github](https://github.com/ThAlvesM)
 
 ## 🎯 Descrição do Projeto
 
