@@ -8,10 +8,11 @@ class Player(pg.sprite.Sprite):
 
         # Carrega as sprite sheets
         self.sprite_sheet_run_right = pg.image.load("RunRight.png").convert_alpha()
-        self.sprite_sheet_run_left = pg.image.load("RunLeft.png").convert_alpha()
+        self.sprite_sheet_run_left = pg.transform.flip(self.sprite_sheet_run_right, True, False)
         self.sprite_sheet_idle_right = pg.image.load("IdleRight.png").convert_alpha()
-        self.sprite_sheet_idle_left = pg.image.load("IdleLeft.png").convert_alpha()
-        self.sprite_sheet_idle_attack = pg.image.load("Idle_Attack.png").convert_alpha()
+        self.sprite_sheet_idle_left = pg.transform.flip(self.sprite_sheet_idle_right, True, False)
+        self.sprite_sheet_idle_attack_right = pg.image.load("IdleAttack_Right.png").convert_alpha()
+        self.sprite_sheet_idle_attack_left = pg.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
 
         self.speed = velocidade
         self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_right)
@@ -20,6 +21,7 @@ class Player(pg.sprite.Sprite):
         self.player_index = 0
         self.gravity = 0
         self.last_pos = 0  # Inicia com idle_right
+        self.attacking = False
 
     def player_input(self):
 
@@ -27,6 +29,10 @@ class Player(pg.sprite.Sprite):
 
         if keys[pg.K_w]:
             self.player_jump()
+
+        if keys[pg.K_SPACE]:
+            if not self.attacking:
+                self.player_attack()
 
         if keys[pg.K_a]:
             self.rect.x -= self.speed
@@ -51,10 +57,17 @@ class Player(pg.sprite.Sprite):
             self.rect.bottom = 400
 
     def player_jump(self):
-        keys = pg.key.get_pressed()
-        if keys[pg.K_w]:
-            if self.rect.bottom >= 400:
-                self.gravity = -20
+        if self.rect.bottom >= 400:
+            self.gravity = -20
+
+    def player_attack(self):
+
+        self.attacking = True
+
+        if self.last_pos == 2:
+            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_left)
+        else:
+            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_right)
 
     def get_sprite_sheet(self, num_frames, sheet):
         frames = []
