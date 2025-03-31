@@ -1,8 +1,8 @@
 # 🕹️ Mini-Projeto IP - Chrono Cin
 
 ## 🏆 Equipe
-- Arthur Torres <atl> - [@github](https://github.com/integrante1)
-- Ian Cerqueira <idhac> - [@github](https://github.com/frogu1)
+- Arthur Torres <atl> - [@github](https://github.com/arthurtdl)
+- Ian Cerqueira <idhac> - [@github](https://github.com/Ian-Cerqueira)
 - Ítalo Cauã <icbo> - [@github](https://github.com/italo-Barbosa)
 - Maycon Otávio <mobs> - [@github](https://github.com/m4yconn)
 - Ryan Souza <rss15> - [@github](https://github.com/RyanRss15)
