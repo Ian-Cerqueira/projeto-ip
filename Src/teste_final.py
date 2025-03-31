@@ -13,6 +13,8 @@ class Player(pg.sprite.Sprite):
         self.sprite_sheet_idle_left = pg.transform.flip(self.sprite_sheet_idle_right, True, False)
         self.sprite_sheet_idle_attack_right = pg.image.load("IdleAttack_Right.png").convert_alpha()
         self.sprite_sheet_idle_attack_left = pg.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
+        self.sprite_sheet_run_attack_right = pg.image.load("Run_attack.png").convert_alpha()
+        self.sprite_sheet_run_attack_left = pg.transform.flip(self.sprite_sheet_run_attack_right, True, False)
 
         self.speed = velocidade
         self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_right)
@@ -27,22 +29,24 @@ class Player(pg.sprite.Sprite):
 
         keys = pg.key.get_pressed()
 
-        if keys[pg.K_w]:
-            self.player_jump()
+        if any(keys) :
+            if keys[pg.K_w]:
+                self.player_jump()
 
-        if keys[pg.K_SPACE]:
-            if not self.attacking:
-                self.player_attack()
+            if keys[pg.K_SPACE]:
+                if not self.attacking:
+                    self.player_attack()
+                    self.attacking = False
 
-        if keys[pg.K_a]:
-            self.rect.x -= self.speed
-            self.last_pos = 2  # Movendo para a esquerda
-            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
+            if keys[pg.K_a]:
+                self.rect.x -= self.speed
+                self.last_pos = 2  # Movendo para a esquerda
+                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
 
-        elif keys[pg.K_d]:
-            self.rect.x += self.speed
-            self.last_pos = 0  # Movendo para a direita
-            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_right)
+            if keys[pg.K_d]:
+                self.rect.x += self.speed
+                self.last_pos = 0  # Movendo para a direita
+                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_right)
 
         else:
             if self.last_pos == 2:
@@ -61,13 +65,18 @@ class Player(pg.sprite.Sprite):
             self.gravity = -20
 
     def player_attack(self):
-
         self.attacking = True
 
         if self.last_pos == 2:
-            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_left)
+            if pg.key.get_pressed()[pg.K_a]:
+                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_attack_left)
+            else:
+                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_left)
         else:
-            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_right)
+            if pg.key.get_pressed()[pg.K_d]:
+                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_attack_right)
+            else:
+                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_right)
 
     def get_sprite_sheet(self, num_frames, sheet):
         frames = []
