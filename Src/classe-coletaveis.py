@@ -69,15 +69,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= self.velocidade
         if keys[pygame.K_DOWN]:
             self.rect.y += self.velocidade
-
-        if self.rect.x < 0:
-            self.rect.x = 0
-        if self.rect.x > screen_width - self.rect.width:
-            self.rect.x = screen_width - self.rect.width
-        if self.rect.y < 0:
-            self.rect.y = 0
-        if self.rect.y > screen_height - self.rect.height:
-            self.rect.y = screen_height - self.rect.height
     
     def add_moeda(self):
         self.inventario['moeda'] += 1
