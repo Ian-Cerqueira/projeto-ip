@@ -19,11 +19,8 @@ class Coletavel:
         self.coletado = False
     
     def draw(self):
-        if not self.coletado:  # Só desenha se não tiver sido coletado
+        if not self.coletado:  
             pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, 40, 50))
-
-    def update(self):
-        self.coletado = True  # Marca como coletado
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -58,14 +55,15 @@ class Player(pygame.sprite.Sprite):
     def add_moeda(self):
         self.inventario['moeda'] += 1
 
-# Função para verificar a colisão entre o jogador e o coletável
 def verificar_colisao(player, coleta):
-    if player.rect.colliderect(pygame.Rect(coleta.x, coleta.y, 40, 50)):
+    if coleta and not coleta.coletado and player.rect.colliderect(pygame.Rect(coleta.x, coleta.y, 40, 50)):
         return True
     return False
 
 player1 = Player()
-coleta = Coletavel('Ian')
+coleta = Coletavel('Ian')   
+coleta2 = Coletavel('Arthur')   
+
 
 while True:
     screen.fill('Black')
@@ -78,16 +76,21 @@ while True:
     keys = pygame.key.get_pressed()
     player1.update(keys)
     
-    # Desenha o coletável (se não tiver sido coletado)
-    coleta.draw()
-
-    # Verifica a colisão e coleta o objeto
-    if verificar_colisao(player1, coleta):
-        print('Coletou')
-        player1.add_moeda()
-        print(player1.inventario)
-        coleta.update()  # Marca o coletável como coletado
-
+    # Se o coletável ainda existe, desenhá-lo e verificar colisão
+    if coleta:
+        coleta.draw()
+        if verificar_colisao(player1, coleta):
+            print('Coletou')
+            player1.add_moeda()
+            print(player1.inventario)
+            coleta = None  # Remove o coletável
+    if coleta2:
+        coleta2.draw()
+        if verificar_colisao(player1, coleta2):
+            print('Coletou')
+            player1.add_moeda()
+            print(player1.inventario)
+            coleta2 = None 
     # Desenha o jogador
     screen.blit(player1.image, player1.rect)
     
