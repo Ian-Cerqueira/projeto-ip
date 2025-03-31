@@ -11,6 +11,7 @@ class Player(pg.sprite.Sprite):
         self.sprite_sheet_run_left = pg.image.load("RunLeft.png").convert_alpha()
         self.sprite_sheet_idle_right = pg.image.load("IdleRight.png").convert_alpha()
         self.sprite_sheet_idle_left = pg.image.load("IdleLeft.png").convert_alpha()
+        self.sprite_sheet_idle_attack = pg.image.load("Idle_Attack.png").convert_alpha()
 
         self.speed = velocidade
         self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_right)
@@ -21,26 +22,27 @@ class Player(pg.sprite.Sprite):
         self.last_pos = 0  # Inicia com idle_right
 
     def player_input(self):
+
         keys = pg.key.get_pressed()
+
+        if keys[pg.K_w]:
+            self.player_jump()
 
         if keys[pg.K_a]:
             self.rect.x -= self.speed
             self.last_pos = 2  # Movendo para a esquerda
-            self.player_jump()
+            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
 
         elif keys[pg.K_d]:
             self.rect.x += self.speed
             self.last_pos = 0  # Movendo para a direita
-            self.player_jump()
-
-        elif keys[pg.K_w]:
-            self.player_jump()
+            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_right)
 
         else:
             if self.last_pos == 2:
-                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_left)
+                self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_left)
             else:
-                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_right)
+                self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_right)
 
     def definir_gravity(self):
         self.gravity += 1
@@ -69,18 +71,6 @@ class Player(pg.sprite.Sprite):
         return frames
 
     def animation_state(self):
-        keys = pg.key.get_pressed()
-
-        if keys[pg.K_a]:
-            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
-        elif keys[pg.K_d]:
-            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_right)
-        else:
-            if self.last_pos == 2:
-                self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_left)
-            else:
-                self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_right)
-
         # Atualiza o índice da animação de forma gradual
         self.player_index += 0.2
         if self.player_index >= len(self.frames):
