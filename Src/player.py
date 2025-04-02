@@ -25,37 +25,48 @@ class Player(pg.sprite.Sprite):
     def player_input(self):
 
         keys = pg.key.get_pressed()
+        moving = False
 
-        if any(keys) :
-            if keys[pg.K_w]:
-                self.player_jump()
+        if keys[pg.K_w]:
+            self.player_jump()
 
-            if keys[pg.K_SPACE]:
-                if not self.attacking:
-                    self.player_attack()
-                    self.attacking = False
+        if keys[pg.K_a]:
+            self.rect.x -= self.speed
+            moving = True
+            self.last_pos = 2  # Esquerda
+        elif keys[pg.K_d]:
+            self.rect.x += self.speed
+            moving = True
+            self.last_pos = 0  # Direita
 
-            if keys[pg.K_a]:
-                self.rect.x -= self.speed
-                self.last_pos = 2  # Movendo para a esquerda
-                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
+        # Verifica se o jogador está atacando
+        if keys[pg.K_SPACE]:
+            self.attacking = True
 
-            if keys[pg.K_d]:
-                self.rect.x += self.speed
-                self.last_pos = 0  # Movendo para a direita
-                self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_right)
+            if moving:
+                if self.last_pos == 2:
+                    self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_attack_left)
+                else:
+                    self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_attack_right)
 
+            else:
+                if self.last_pos == 2:
+                    self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_left)
+                else:
+                    self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_right)
+        else:
+            self.attacking = False
+            
+            if moving:
+                if self.last_pos == 2:
+                    self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
+                else:
+                    self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_right)
             else:
                 if self.last_pos == 2:
                     self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_left)
                 else:
                     self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_right)
-
-        else:
-            if self.last_pos == 2:
-                self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_left)
-            else:
-                self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_right)
 
     def definir_gravity(self):
         self.gravity += 1
