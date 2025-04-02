@@ -27,3 +27,4 @@ class ItemColetavel(pygame.sprite.Sprite):
         self.rect.x = loc_x
         self.rect.y = loc_y
 
+# renomeia para coletaveis_01
