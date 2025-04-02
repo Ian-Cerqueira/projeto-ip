@@ -120,12 +120,12 @@ class Player(pg.sprite.Sprite):
 
 def criar_itens(qtd_moedas, qtd_chaves, qtd_estrelas):
     grupo = pg.sprite.Group()
-    for _ in range(qtd_moedas): grupo.add(ItemColetavel('moeda'))
-    for _ in range(qtd_chaves): grupo.add(ItemColetavel('chave'))
-    for _ in range(qtd_estrelas): grupo.add(ItemColetavel('estrela'))
+    for _ in range(qtd_moedas): grupo.add(ItemColetavel('moeda', 170, 350))
+    for _ in range(qtd_chaves): grupo.add(ItemColetavel('chave', 280, 350))
+    for _ in range(qtd_estrelas): grupo.add(ItemColetavel('estrela', 400, 250))
     return grupo
 
-coletaveis = criar_itens(qtd_moedas=8, qtd_chaves=1, qtd_estrelas=1)
+coletaveis = criar_itens(qtd_moedas=1, qtd_chaves=1, qtd_estrelas=1)
 
 # Configurações iniciais
 run = True
@@ -138,6 +138,7 @@ cenario = pg.image.load('sprite_sheets/background.jpg')
 # Cria o grupo e adiciona o jogador
 player = pg.sprite.GroupSingle()
 player.add(Player(5))
+
 
 # Loop principal do jogo
 while run:
