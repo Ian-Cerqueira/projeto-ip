@@ -3,13 +3,13 @@ class Player(pg.sprite.Sprite):
         super().__init__()
 
         # Carrega as sprite sheets
-        self.sprite_sheet_run_right = pg.image.load("RunRight.png").convert_alpha()
+        self.sprite_sheet_run_right = pg.image.load("assets/RunRight.png").convert_alpha()
         self.sprite_sheet_run_left = pg.transform.flip(self.sprite_sheet_run_right, True, False)
-        self.sprite_sheet_idle_right = pg.image.load("IdleRight.png").convert_alpha()
+        self.sprite_sheet_idle_right = pg.image.load("assets/IdleRight.png").convert_alpha()
         self.sprite_sheet_idle_left = pg.transform.flip(self.sprite_sheet_idle_right, True, False)
-        self.sprite_sheet_idle_attack_right = pg.image.load("Idle_Attack.png").convert_alpha()
+        self.sprite_sheet_idle_attack_right = pg.image.load("assets/Idle_Attack.png").convert_alpha()
         self.sprite_sheet_idle_attack_left = pg.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
-        self.sprite_sheet_run_attack_right = pg.image.load("Run_attack.png").convert_alpha()
+        self.sprite_sheet_run_attack_right = pg.image.load("assets/Run_attack.png").convert_alpha()
         self.sprite_sheet_run_attack_left = pg.transform.flip(self.sprite_sheet_run_attack_right, True, False)
 
         self.speed = velocidade
