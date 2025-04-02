@@ -9,13 +9,13 @@ class Player(pg.sprite.Sprite):
         super().__init__()
 
         # Carrega as sprite sheets
-        self.sprite_sheet_run_right = pg.image.load("sprite_sheets/RunRight.png").convert_alpha()
+        self.sprite_sheet_run_right = pg.image.load("assets/RunRight.png").convert_alpha()
         self.sprite_sheet_run_left = pg.transform.flip(self.sprite_sheet_run_right, True, False)
-        self.sprite_sheet_idle_right = pg.image.load("sprite_sheets/IdleRight.png").convert_alpha()
+        self.sprite_sheet_idle_right = pg.image.load("assets/IdleRight.png").convert_alpha()
         self.sprite_sheet_idle_left = pg.transform.flip(self.sprite_sheet_idle_right, True, False)
-        self.sprite_sheet_idle_attack_right = pg.image.load("sprite_sheets/Idle_Attack.png").convert_alpha()
+        self.sprite_sheet_idle_attack_right = pg.image.load("assets/Idle_Attack.png").convert_alpha()
         self.sprite_sheet_idle_attack_left = pg.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
-        self.sprite_sheet_run_attack_right = pg.image.load("sprite_sheets/Run_attack.png").convert_alpha()
+        self.sprite_sheet_run_attack_right = pg.image.load("assets/Run_attack.png").convert_alpha()
         self.sprite_sheet_run_attack_left = pg.transform.flip(self.sprite_sheet_run_attack_right, True, False)
 
         self.speed = velocidade
@@ -146,7 +146,7 @@ screen_width = 720
 screen_height = 480
 clock = pg.time.Clock()
 screen = pg.display.set_mode((screen_width, screen_height))
-cenario = pg.image.load('sprite_sheets/background.jpg')
+cenario = pg.image.load('assets/background.jpg')
 
 # Cria o grupo e adiciona o jogador
 player = pg.sprite.GroupSingle()
