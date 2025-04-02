@@ -12,9 +12,9 @@ clock = pygame.time.Clock()
 
 #as cores v]ao ser os tipos de coletaveis
 SPRITES = {
-    'moeda': "sprite_sheets/pixil-frame-0.png",  #vermelho
-    'chave': "sprite_sheets/key(1).png",  #verde
-    'estrela': "sprite_sheets/pixil-frame-star.png"  #amarelo
+    'moeda': "assets/pixil-frame-0.png",  #vermelho
+    'chave': "assets/key(1).png",  #verde
+    'estrela': "assets/pixil-frame-star.png"  #amarelo
 }
 
 class ItemColetavel(pygame.sprite.Sprite):
@@ -27,4 +27,3 @@ class ItemColetavel(pygame.sprite.Sprite):
         self.rect.x = loc_x
         self.rect.y = loc_y
 
-# renomeia para coletaveis_01
