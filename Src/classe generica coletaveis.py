@@ -11,19 +11,19 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
 #as cores v]ao ser os tipos de coletaveis
-COLORS = {
-    'moeda': (255, 0, 0),  #vermelho
-    'chave': (0, 255, 0),  #verde
-    'estrela': (255, 255, 0)  #amarelo
+SPRITES = {
+    'moeda': "sprite_sheets/pixil-frame-0.png",  #vermelho
+    'chave': "sprite_sheets/key(1).png",  #verde
+    'estrela': "sprite_sheets/pixil-frame-star.png"  #amarelo
 }
 
 class ItemColetavel(pygame.sprite.Sprite):
-    def __init__(self, tipo):
+    def __init__(self, tipo, loc_x, loc_y):
         super().__init__()
         self.tipo = tipo
         self.image = pygame.Surface((40, 50))
-        self.image.fill(COLORS[tipo])
+        self.image = pygame.image.load(SPRITES[tipo])
         self.rect = self.image.get_rect()
-        self.rect.x = randint(50, screen_width - 50)
-        self.rect.y = randint(50, screen_height - 50)
+        self.rect.x = loc_x
+        self.rect.y = loc_y
 
