@@ -17,7 +17,7 @@ class Player(pg.sprite.Sprite):
         self.sprite_sheet_run_attack_left = pg.transform.flip(self.sprite_sheet_run_attack_right, True, False)
         self.sprite_sheet_idle_jump_right = pg.image.load("src/assets/Cyborg_jump.png").convert_alpha()
         self.sprite_sheet_idle_jump_left = pg.transform.flip(self.sprite_sheet_idle_jump_right, True, False)
-        self.sprite_sheet_heart = pg.image.load("Src/assets/life_heart.jpeg").convert_alpha()
+        # self.sprite_sheet_heart = pg.image.load("Src/assets/life_heart.jpeg").convert_alpha()
 
         self.speed = velocidade
         self.inventario = {'moeda': 0, 'chave': 0, 'estrela': 0}
