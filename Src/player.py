@@ -1,49 +1,61 @@
+import pygame as pg
+
+pg.init()
+
 class Player(pg.sprite.Sprite):
     def __init__(self, velocidade):
         super().__init__()
 
         # Carrega as sprite sheets
-        self.sprite_sheet_run_right = pg.image.load("assets/RunRight.png").convert_alpha()
+        self.sprite_sheet_run_right = pg.image.load("src/assets/RunRight.png").convert_alpha()
         self.sprite_sheet_run_left = pg.transform.flip(self.sprite_sheet_run_right, True, False)
-        self.sprite_sheet_idle_right = pg.image.load("assets/IdleRight.png").convert_alpha()
+        self.sprite_sheet_idle_right = pg.image.load("src/assets/IdleRight.png").convert_alpha()
         self.sprite_sheet_idle_left = pg.transform.flip(self.sprite_sheet_idle_right, True, False)
-        self.sprite_sheet_idle_attack_right = pg.image.load("assets/Idle_Attack.png").convert_alpha()
+        self.sprite_sheet_idle_attack_right = pg.image.load("src/assets/Idle_Attack.png").convert_alpha()
         self.sprite_sheet_idle_attack_left = pg.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
-        self.sprite_sheet_run_attack_right = pg.image.load("assets/Run_attack.png").convert_alpha()
+        self.sprite_sheet_run_attack_right = pg.image.load("src/assets/Run_attack.png").convert_alpha()
         self.sprite_sheet_run_attack_left = pg.transform.flip(self.sprite_sheet_run_attack_right, True, False)
+        self.sprite_sheet_idle_jump_right = pg.image.load("src/assets/Cyborg_jump.png").convert_alpha()
+        self.sprite_sheet_idle_jump_left = pg.transform.flip(self.sprite_sheet_idle_jump_right, True, False)
+        self.sprite_sheet_heart = pg.image.load("Src/assets/life_heart.jpeg").convert_alpha()
 
         self.speed = velocidade
         self.inventario = {'moeda': 0, 'chave': 0, 'estrela': 0}
         self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_right)
         self.image = self.frames[0]
         self.rect = self.image.get_rect(midbottom=(100, 50))
+        self.mask = pg.mask.from_surface(self.image)
         self.player_index = 0
         self.gravity = 0
         self.last_pos = 0  # Inicia com idle_right
+        self.jumping = False
         self.attacking = False
+        self.moving = False
+        self.health = 3
+
 
     def player_input(self):
 
         keys = pg.key.get_pressed()
-        moving = False
+        self.moving = False
 
         if keys[pg.K_w]:
             self.player_jump()
 
         if keys[pg.K_a]:
             self.rect.x -= self.speed
-            moving = True
+            self.moving = True
             self.last_pos = 2  # Esquerda
         elif keys[pg.K_d]:
             self.rect.x += self.speed
-            moving = True
+            self.moving = True
             self.last_pos = 0  # Direita
 
         # Verifica se o jogador está atacando
         if keys[pg.K_SPACE]:
             self.attacking = True
 
-            if moving:
+            if self.moving:
                 if self.last_pos == 2:
                     self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_attack_left)
                 else:
@@ -57,7 +69,7 @@ class Player(pg.sprite.Sprite):
         else:
             self.attacking = False
             
-            if moving:
+            if self.moving:
                 if self.last_pos == 2:
                     self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
                 else:
@@ -65,16 +77,23 @@ class Player(pg.sprite.Sprite):
             else:
                 if self.last_pos == 2:
                     self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_left)
-                else:
+                    if self.jumping :
+                        self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_jump_left)
+
+                elif self.last_pos == 0:
                     self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_right)
+                    if self.jumping :
+                        self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_jump_right)
 
     def definir_gravity(self):
         self.gravity += 1
         self.rect.y += self.gravity
         if self.rect.bottom >= 400:
+            self.jumping = False
             self.rect.bottom = 400
 
     def player_jump(self):
+        self.jumping = True
         if self.rect.bottom >= 400:
             self.gravity = -20
 
@@ -92,11 +111,27 @@ class Player(pg.sprite.Sprite):
             else:
                 self.frames = self.get_sprite_sheet(6, self.sprite_sheet_idle_attack_right)
 
+    def get_damage(self):
+        if self.health > 0 :
+            self.health -= 1 # tomou dano
+        
+    def get_health(self):
+        if self.health < 3 :
+            self.health += 1 # pegou um coração e recuperou vida
+
+    def display_hearts(self):
+        pass
+
     def add_item(self, item):
         if item.tipo in self.inventario:
             self.inventario[item.tipo] += 1
             print(f'Coletou {item.tipo}. Inventário: {self.inventario}')
 
+    '''def checkcollisions_x (self):
+        if self.moving :
+            if pg.Rect.colliderect(self.rect, test_rect):
+                self.rect.x = 200'''
+            
     def get_sprite_sheet(self, num_frames, sheet):
         frames = []
         sheet_width, sheet_height = sheet.get_size()
@@ -124,3 +159,6 @@ class Player(pg.sprite.Sprite):
         self.player_input()
         self.definir_gravity()
         self.animation_state()
+        self.display_hearts()
+        '''self.checkcollisions_x()'''
+        '''self.checkcollisions_y()'''
