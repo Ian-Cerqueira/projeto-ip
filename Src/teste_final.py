@@ -30,7 +30,7 @@ test_rect = test_surface.get_rect(topleft = (200,280))
 player = pg.sprite.GroupSingle()
 player.add(Player(5))
 enemy = pg.sprite.GroupSingle()
-enemy.add(Foes(5))
+enemy.add(Foes(2))
 
 # Loop principal do jogo
 while run:
@@ -43,13 +43,14 @@ while run:
     enemy.update()
     player.draw(screen)
     player.update()
+    screen.blit(player.sprite.mask.to_surface(unsetcolor=(0, 0, 0, 0), setcolor=(255, 255, 255, 255)), (50, 50))
 
     coletados = pg.sprite.spritecollide(player.sprite, coletaveis, True, pg.sprite.collide_mask)
     for coletado in coletados:
         player.sprite.add_item(coletado)
 
     if player.sprite.attacking:
-        pg.sprite.spritecollide(player.sprite, enemy, True)
+        pg.sprite.spritecollide(player.sprite, enemy, True, pg.sprite.collide_mask)
 
     coletaveis.draw(screen)
     screen.blit(test_surface, test_rect)

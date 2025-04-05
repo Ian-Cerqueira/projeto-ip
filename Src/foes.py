@@ -17,6 +17,7 @@ class Foes(pg.sprite.Sprite):
         self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_right)
         self.image = self.frames[0]
         self.rect = self.image.get_rect(midbottom=(600, 50))
+        self.mask = pg.mask.from_surface(self.image)
         self.player_index = 0
         self.gravity = 0
         self.last_pos = 0 # Inicia com idle_right
@@ -77,6 +78,8 @@ class Foes(pg.sprite.Sprite):
 
         # Atualiza a imagem para o frame atual
         self.image = self.frames[int(self.player_index)]
+
+        self.mask = pg.mask.from_surface(self.image)
 
     def update(self):
         self.enemy_decision()

@@ -155,6 +155,8 @@ class Player(pg.sprite.Sprite):
         # Atualiza a imagem para o frame atual
         self.image = self.frames[int(self.player_index)]
 
+        self.mask = pg.mask.from_surface(self.image)
+
     def update(self):
         self.player_input()
         self.definir_gravity()
