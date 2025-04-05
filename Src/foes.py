@@ -1,4 +1,5 @@
 import pygame as pg
+from coletaveis_01 import ItemColetavel
 
 pg.init()
 
@@ -27,6 +28,7 @@ class Foes(pg.sprite.Sprite):
         self.was_hit = False
         self.dead = False
         self.drop = 'chave'
+        self.item_was_drop = False
 
     ########################################################
     def enemy_decision(self):
@@ -49,7 +51,7 @@ class Foes(pg.sprite.Sprite):
         if self.was_hit : # morreu
             self.frames = self.get_sprite_sheet(6, self.sprite_sheet_death)
             self.speed = 0
-            self.drop
+            # ItemColetavel(self.drop, self.rect.x, (self.rect.y-30))
 
     def definir_gravity(self):
         self.gravity += 1
@@ -80,23 +82,26 @@ class Foes(pg.sprite.Sprite):
         return frames        
     
     def animation_state(self):
-        # Atualiza o índice da animação de forma gradual
-        if self.was_hit == False :    
+        if self.was_hit == False :
             self.player_index += 0.2 # animação normal
         else:
             self.player_index += 0.15 # a animação da morte é um pouco mais lenta
+
         if self.player_index >= len(self.frames):
             self.player_index = 0
-            if self.was_hit == True :
-                self.dead = True
+            if self.was_hit:
+                self.dead = True  # Só marca como morto aqui
 
-        # Atualiza a imagem para o frame atual
-        if self.dead == False : 
+        if self.dead == False :
             self.image = self.frames[int(self.player_index)]
         else:
             self.image = self.frames[-1]
+
 
     def update(self):
         self.enemy_decision()
         self.animation_state()
         self.definir_gravity()
+        if self.dead and not self.item_was_drop:
+            self.item_was_drop = True
+            return ItemColetavel(self.drop, self.rect.centerx, self.rect.bottom - 50)

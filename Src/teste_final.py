@@ -40,7 +40,9 @@ while run:
 
     screen.blit(cenario, (0, 0))
     enemy.draw(screen)
-    enemy.update()
+    dropped_item = enemy.sprite.update()
+    if dropped_item:
+        coletaveis.add(dropped_item)
     player.draw(screen)
     player.update()
     screen.blit(player.sprite.mask.to_surface(unsetcolor=(0, 0, 0, 0), setcolor=(255, 255, 255, 255)), (50, 50))
@@ -52,6 +54,7 @@ while run:
     if player.sprite.attacking:
         if pg.sprite.spritecollide(player.sprite, enemy, False, pg.sprite.collide_mask) :    
             enemy.sprite.was_hit = True
+            # ItemColetavel(enemy.sprite.drop, enemy.sprite.rect.x, (enemy.sprite.rect.y-30))
 
     coletaveis.draw(screen)
     screen.blit(test_surface, test_rect)
