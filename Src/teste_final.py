@@ -37,10 +37,6 @@ while run:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
-        if event.type == pg.KEYDOWN :
-            if player.sprite.attacking and pg.sprite.spritecollide(player.sprite, enemy, True) :
-                pg.sprite.spritecollide(player.sprite, enemy, True)
-
 
     screen.blit(cenario, (0, 0))
     enemy.draw(screen)
@@ -51,6 +47,9 @@ while run:
     coletados = pg.sprite.spritecollide(player.sprite, coletaveis, True, pg.sprite.collide_mask)
     for coletado in coletados:
         player.sprite.add_item(coletado)
+
+    if player.sprite.attacking:
+        pg.sprite.spritecollide(player.sprite, enemy, True)
 
     coletaveis.draw(screen)
     screen.blit(test_surface, test_rect)
