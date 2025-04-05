@@ -11,6 +11,7 @@ class Foes(pg.sprite.Sprite):
         self.sprite_sheet_idle_left = pg.transform.flip(self.sprite_sheet_idle_right, True, False)
         self.sprite_sheet_idle_attack_right = pg.image.load("Src/assets/Punk_punch.png").convert_alpha()
         self.sprite_sheet_idle_attack_left = pg.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
+        self.sprite_sheet_death = pg.image.load("Src/assets/Punk_death.png").convert_alpha()
 
         self.speed = velocidade
         # nao tem inventario
@@ -23,6 +24,9 @@ class Foes(pg.sprite.Sprite):
         self.last_pos = 0 # Inicia com idle_right
         self.attacking = False
         self.moving = False
+        self.was_hit = False
+        self.dead = False
+        self.drop = 'chave'
 
     ########################################################
     def enemy_decision(self):
@@ -41,6 +45,11 @@ class Foes(pg.sprite.Sprite):
                     self.last_pos = 2
                 else:
                     self.last_pos = 0
+
+        if self.was_hit : # morreu
+            self.frames = self.get_sprite_sheet(6, self.sprite_sheet_death)
+            self.speed = 0
+            self.drop
 
     def definir_gravity(self):
         self.gravity += 1
@@ -72,14 +81,20 @@ class Foes(pg.sprite.Sprite):
     
     def animation_state(self):
         # Atualiza o índice da animação de forma gradual
-        self.player_index += 0.2
+        if self.was_hit == False :    
+            self.player_index += 0.2 # animação normal
+        else:
+            self.player_index += 0.15 # a animação da morte é um pouco mais lenta
         if self.player_index >= len(self.frames):
             self.player_index = 0
+            if self.was_hit == True :
+                self.dead = True
 
         # Atualiza a imagem para o frame atual
-        self.image = self.frames[int(self.player_index)]
-
-        self.mask = pg.mask.from_surface(self.image)
+        if self.dead == False : 
+            self.image = self.frames[int(self.player_index)]
+        else:
+            self.image = self.frames[-1]
 
     def update(self):
         self.enemy_decision()

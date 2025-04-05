@@ -50,7 +50,8 @@ while run:
         player.sprite.add_item(coletado)
 
     if player.sprite.attacking:
-        pg.sprite.spritecollide(player.sprite, enemy, True, pg.sprite.collide_mask)
+        if pg.sprite.spritecollide(player.sprite, enemy, False, pg.sprite.collide_mask) :    
+            enemy.sprite.was_hit = True
 
     coletaveis.draw(screen)
     screen.blit(test_surface, test_rect)
