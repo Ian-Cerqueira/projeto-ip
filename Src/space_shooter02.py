@@ -25,8 +25,7 @@ CIANO = (0, 255, 255)
 class Jogador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((50, 40))
-        self.image.fill(AZUL)
+        self.image = pygame.image.load("nave_player.png")
         self.rect = self.image.get_rect()
         self.rect.centerx = largura_tela // 2
         self.rect.bottom = altura_tela - 10
