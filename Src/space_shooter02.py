@@ -140,11 +140,9 @@ class PowerUp(pygame.sprite.Sprite):
         elif self.tipo == 'pontos':
             self.image = pygame.transform.scale2x(pygame.image.load('50_points.png'))
         elif self.tipo == 'tiro_duplo':
-            self.image = pygame.Surface((25, 25))
-            self.image.fill(CIANO)
+            self.image = pygame.transform.scale2x(pygame.image.load('tiro_duplo.png'))
         elif self.tipo == 'tiro_triplo':
-            self.image = pygame.Surface((25, 25))
-            self.image.fill(LARANJA)
+            self.image = pygame.transform.scale2x(pygame.image.load('tiro_triplo.png'))
         
         self.rect = self.image.get_rect()
         if x and y:
@@ -211,10 +209,9 @@ tipos = ['1', '2', '3']
 class CometaChefe(Inimigo): # tirar herança
     def __init__(self, x, y):
         super().__init__(random.choice(tipos))
-        self.image = pygame.transform.scale_by(self.image, 0.5)
-        self.image.fill(AMARELO)
-        self.rect.centerx = x
-        self.rect.centery = y
+        self.image = pygame.image.load('spirte_tiro_boss.png')
+        self.rect.centerx = x - 45
+        self.rect.centery = y - 50
         self.velocidade_y = 3
         self.velocidade_x = 0
         self.dano = 1
