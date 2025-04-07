@@ -164,8 +164,7 @@ class PowerUp(pygame.sprite.Sprite):
 class InimigoChefe(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((100, 60))
-        self.image.fill(ROXO)
+        self.image = pygame.image.load('sprite_rayquaza.png')
         self.rect = self.image.get_rect()
         self.rect.centerx = largura_tela // 2
         self.rect.y = 50
