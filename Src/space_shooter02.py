@@ -7,6 +7,8 @@ pygame.init()
 largura_tela = 1200
 altura_tela = 720
 tela = pygame.display.set_mode((largura_tela, altura_tela))
+cenario = pygame.image.load("background_space.png")
+cenario = pygame.transform.scale(cenario, (largura_tela, altura_tela))
 pygame.display.set_caption("Invasores Espaciais")
 relogio = pygame.time.Clock()
 
@@ -360,7 +362,7 @@ while rodando:
                 todos_sprites.add(powerup)
                 powerups.add(powerup)
     
-    tela.fill(PRETO)
+    tela.blit(cenario, (0, 0))
     todos_sprites.draw(tela)
     
     #desenha a barra de vida do chefe se ele estiver vivo
