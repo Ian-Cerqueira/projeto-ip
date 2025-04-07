@@ -134,11 +134,9 @@ class PowerUp(pygame.sprite.Sprite):
         self.tipo = tipo
         
         if self.tipo == 'vida':
-            self.image = pygame.Surface((25, 25))
-            self.image.fill(ROXO)
+            self.image = pygame.transform.scale2x(pygame.image.load('life_up_nave.png'))
         elif self.tipo == 'pontos':
-            self.image = pygame.Surface((25, 25))
-            self.image.fill(AMARELO)
+            self.image = pygame.transform.scale2x(pygame.image.load('50_points.png'))
         elif self.tipo == 'tiro_duplo':
             self.image = pygame.Surface((25, 25))
             self.image.fill(CIANO)
@@ -288,7 +286,7 @@ while rodando:
         for colisao in colisoes:
             jogador.pontuacao += 10
             #chance de dropar um powerup (10%) melhor aumentar até
-            if random.random() < 0.1:
+            if random.random() < 0.9:
                 tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
                 powerup = PowerUp(random.choice(tipos_powerup))
                 powerup.rect.centerx = colisao.rect.centerx
