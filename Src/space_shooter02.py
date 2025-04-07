@@ -4,7 +4,7 @@ import sys
 
 pygame.init()
 
-largura_tela = 1000
+largura_tela = 1200
 altura_tela = 720
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 pygame.display.set_caption("Invasores Espaciais")
@@ -83,10 +83,19 @@ class Jogador(pygame.sprite.Sprite):
 
 #classe dos inimigos (cometas)
 class Inimigo(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, tipo_cometa):
         super().__init__()
-        self.image = pygame.Surface((30, 30))
-        self.image.fill(VERMELHO)
+        dic = {'1': 'cometa_gray.png',
+               '2': 'cometa_gray_2.png',
+               '3': 'cometa_Brown.png'}
+        
+        self.image = pygame.image.load(dic[tipo_cometa])
+        if tipo_cometa == '1' :    
+            self.image = pygame.transform.scale_by(self.image, 0.13)
+        elif tipo_cometa == '2' :
+            self.image = pygame.transform.scale_by(self.image, 0.2)
+        else:
+            self.image = pygame.transform.scale_by(self.image, 0.4)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(largura_tela - self.rect.width)
         self.rect.y = random.randrange(-100, -40)
@@ -199,12 +208,14 @@ class InimigoChefe(pygame.sprite.Sprite):
         pygame.draw.rect(superficie, VERDE, barra_rect)
         pygame.draw.rect(superficie, BRANCO, fundo_rect, 2)
 
-class CometaChefe(Inimigo):
+tipos = ['1', '2', '3']
+class CometaChefe(Inimigo): # tirar herança
     def __init__(self, x, y):
-        super().__init__()
+        super().__init__(random.choice(tipos))
+        self.image = pygame.transform.scale_by(self.image, 0.5)
+        self.image.fill(AMARELO)
         self.rect.centerx = x
         self.rect.centery = y
-        self.image.fill(AMARELO)
         self.velocidade_y = 3
         self.velocidade_x = 0
         self.dano = 1
@@ -222,7 +233,7 @@ todos_sprites.add(jogador)
 
 #cria inimigos iniciais
 for i in range(8):
-    inimigo = Inimigo()
+    inimigo = Inimigo(random.choice(tipos))
     todos_sprites.add(inimigo)
     inimigos.add(inimigo)
 
@@ -259,7 +270,7 @@ while rodando:
                 todos_sprites.add(jogador)
 
                 for i in range(8):
-                    inimigo = Inimigo()
+                    inimigo = Inimigo(random.choice(tipos))
                     todos_sprites.add(inimigo)
                     inimigos.add(inimigo)
     
@@ -279,13 +290,13 @@ while rodando:
             jogador.pontuacao += 10
             #chance de dropar um powerup (10%) melhor aumentar até
             if random.random() < 0.1:
-                tipos = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
-                powerup = PowerUp(random.choice(tipos))
+                tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
+                powerup = PowerUp(random.choice(tipos_powerup))
                 powerup.rect.centerx = colisao.rect.centerx
                 powerup.rect.centery = colisao.rect.centery
                 todos_sprites.add(powerup)
                 powerups.add(powerup)
-            inimigo = Inimigo()
+            inimigo = Inimigo(random.choice(tipos))
             todos_sprites.add(inimigo)
             inimigos.add(inimigo)
         
@@ -304,7 +315,7 @@ while rodando:
         colisoes = pygame.sprite.spritecollide(jogador, inimigos, True)
         for colisao in colisoes:
             jogador.vidas -= 1
-            inimigo = Inimigo()
+            inimigo = Inimigo(random.choice(tipos))
             todos_sprites.add(inimigo)
             inimigos.add(inimigo)
             if jogador.vidas <= 0:
@@ -338,7 +349,7 @@ while rodando:
             tempo_spawn += 1
             if tempo_spawn > 60 and len(inimigos) < 10:
                 tempo_spawn = 0
-                inimigo = Inimigo()
+                inimigo = Inimigo(random.choice(tipos))
                 todos_sprites.add(inimigo)
                 inimigos.add(inimigo)
         
@@ -347,8 +358,8 @@ while rodando:
         if tempo_powerup > 300:
             tempo_powerup = 0
             if random.random() < 0.3:  # 30% de chance
-                tipos = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
-                powerup = PowerUp(random.choice(tipos))
+                tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
+                powerup = PowerUp(random.choice(tipos_powerup))
                 todos_sprites.add(powerup)
                 powerups.add(powerup)
     
