@@ -200,8 +200,8 @@ class InimigoChefe(pygame.sprite.Sprite):
         vida_ratio = self.vida_atual / self.vida_maxima
         largura_atual = largura_barra * vida_ratio
         
-        barra_rect = pygame.Rect(self.rect.x, self.rect.y - 15, largura_atual, altura_barra)
-        fundo_rect = pygame.Rect(self.rect.x, self.rect.y - 15, largura_barra, altura_barra)
+        barra_rect = pygame.Rect(self.rect.x + 45, self.rect.y - 15, largura_atual, altura_barra)
+        fundo_rect = pygame.Rect(self.rect.x + 45, self.rect.y - 15, largura_barra, altura_barra)
         
         pygame.draw.rect(superficie, VERMELHO, fundo_rect)
         pygame.draw.rect(superficie, VERDE, barra_rect)
