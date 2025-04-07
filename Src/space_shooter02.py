@@ -392,7 +392,8 @@ while rodando:
     
     if jogo_terminado:
         texto_game_over = fonte.render("FIM DE JOGO! Pressione R para reiniciar", True, VERMELHO)
-        tela.blit(texto_game_over, (largura_tela//2 - 180, altura_tela//2))
+        rect_game_over = texto_game_over.get_rect(center=(largura_tela//2, altura_tela//2))
+        tela.blit(texto_game_over, rect_game_over)
     
     pygame.display.flip()
 
