@@ -33,7 +33,7 @@ class Jogador(pygame.sprite.Sprite):
         self.rect.bottom = altura_tela - 10
         self.mask = pygame.mask.from_surface(self.image)
         self.velocidade = 8
-        self.vidas = 3
+        self.vidas = 99999
         self.delay_tiro = 250  #milissegundos
         self.ultimo_tiro = pygame.time.get_ticks()
         self.pontuacao = 0
@@ -91,7 +91,6 @@ class Inimigo(pygame.sprite.Sprite):
         dic = {'1': 'cometa_gray.png',
                '2': 'cometa_gray_2.png',
                '3': 'cometa_Brown.png'}
-        
         self.image = pygame.image.load(dic[tipo_cometa])
         if tipo_cometa == '1' :    
             self.image = pygame.transform.scale_by(self.image, 0.13)
@@ -118,6 +117,7 @@ class Tiro(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface((10, 20))
         self.image.fill(VERDE)
+        # self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
@@ -165,7 +165,6 @@ class InimigoChefe(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load('sprite_rayquaza.png')
         self.rect = self.image.get_rect()
-        self.rect.centerx = largura_tela // 2
         self.rect.y = 50
         self.velocidade_x = 3
         self.direcao = 1
@@ -207,17 +206,22 @@ class InimigoChefe(pygame.sprite.Sprite):
         pygame.draw.rect(superficie, BRANCO, fundo_rect, 2)
 
 tipos = ['1', '2', '3']
-class CometaChefe(Inimigo): # tirar herança
+class CometaChefe(pygame.sprite.Sprite): 
     def __init__(self, x, y):
-        super().__init__(random.choice(tipos))
+        super().__init__()
         self.image = pygame.image.load('sprite_tiro_boss.png')
+        self.rect = self.image.get_rect(center=(x,y))
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect.centerx = x - 45
-        self.rect.centery = y - 50
         self.velocidade_y = 3
         self.velocidade_x = 0
         self.dano = 1
 
+    def update(self):
+        self.rect.y += self.velocidade_y
+        self.rect.x += self.velocidade_x
+
+        if self.rect.top > altura_tela + 10 or self.rect.left < -25 or self.rect.right > largura_tela + 25: # modularizar largura e altura da tela
+            self.kill()
 
 #grupos de sprites
 todos_sprites = pygame.sprite.Group()
@@ -226,9 +230,15 @@ tiros = pygame.sprite.Group()
 powerups = pygame.sprite.Group()
 cometas_chefe = pygame.sprite.Group()
 chefes = pygame.sprite.Group()
+player = pygame.sprite.GroupSingle()
 
-jogador = Jogador()
-todos_sprites.add(jogador)
+###
+cometas_chefe.add(CometaChefe(100, 100))
+inimigos.add(Inimigo(random.choice(tipos)))
+player.add(Jogador())
+
+'''jogador = Jogador()
+todos_sprites.add(jogador)'''
 
 #cria inimigos iniciais
 for i in range(8):
@@ -253,20 +263,17 @@ while rodando:
             rodando = False
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_SPACE:
-                jogador.atirar()
+                player.sprite.atirar()
             if evento.key == pygame.K_r and jogo_terminado:
                 jogo_terminado = False
-                jogador.vidas = 3
-                jogador.pontuacao = 0
+                player.sprite.vidas = 3
+                player.sprite.pontuacao = 0
                 spawn_chefe = False
-                jogador.powerup_tiro_duplo = False
-                jogador.powerup_tiro_triplo = False
+                player.sprite.powerup_tiro_duplo = False
+                player.sprite.powerup_tiro_triplo = False
 
                 for sprite in todos_sprites:
                     sprite.kill()
-
-                jogador = Jogador()
-                todos_sprites.add(jogador)
 
                 for i in range(8):
                     inimigo = Inimigo(random.choice(tipos))
@@ -275,19 +282,20 @@ while rodando:
     
     if not jogo_terminado:
         todos_sprites.update()
-        
+        player.sprite.update()
+
         #aparece o chefe quando o jogador alcança 100 pontos
-        if jogador.pontuacao >= 100 and not spawn_chefe and len(chefes) == 0:
+        if player.sprite.pontuacao >= 100 and not spawn_chefe and len(chefes) == 0:
             chefe = InimigoChefe()
             todos_sprites.add(chefe)
             chefes.add(chefe)
             spawn_chefe = True
         
         #colisões entre tiros e inimigos normais
-        # colisoes = pygame.sprite.spritecollide(todos_sprites.player.sprite, inimigos, True, pygame.sprite.collide_mask)
+        # colisoes = pygame.sprite.spritecollide(tiros.sprite, inimigos, True, pygame.sprite.collide_mask)
         colisoes = pygame.sprite.groupcollide(inimigos, tiros, True, True)
         for colisao in colisoes:
-            jogador.pontuacao += 10
+            player.sprite.pontuacao += 10
             #chance de dropar um powerup (10%) melhor aumentar até
             if random.random() < 0.9:
                 tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
@@ -308,41 +316,43 @@ while rodando:
                     chefe.vida_atual -= 10
                     if chefe.vida_atual <= 0:
                         chefe.kill()
-                        jogador.pontuacao += 100
+                        player.sprite.pontuacao += 100
                         spawn_chefe = False
                 
         #colisões entre jogador e inimigos normais
-        colisoes = pygame.sprite.spritecollide(jogador, inimigos, True)
+        #colisoes = pygame.sprite.spritecollide(player.sprite, inimigos, True, pygame.sprite.collide_mask)
+        colisoes = pygame.sprite.spritecollide(player.sprite, inimigos, True)
         for colisao in colisoes:
-            jogador.vidas -= 1
+            player.sprite.vidas -= 1
             inimigo = Inimigo(random.choice(tipos))
             todos_sprites.add(inimigo)
             inimigos.add(inimigo)
-            if jogador.vidas <= 0:
+            if player.sprite.vidas <= 0:
                 jogo_terminado = True
         
         #colisões entre jogador e cometas do chefe
-        colisoes_cometa = pygame.sprite.spritecollide(jogador, cometas_chefe, True)
-        for cometa in colisoes_cometa:
-            jogador.vidas -= cometa.dano
-            if jogador.vidas <= 0:
+        # colisoes_cometa = pygame.sprite.spritecollide(jogador, cometas_chefe, True)
+        colisoes_cometa = pygame.sprite.spritecollide(player.sprite, cometas_chefe, True, pygame.sprite.collide_mask)
+        for cometa in colisoes_cometa[:]:
+            player.sprite.vidas -= cometa.dano
+            if player.sprite.vidas <= 0:
                 jogo_terminado = True
         
         #colisões entre jogador e powerups
-        colisoes = pygame.sprite.spritecollide(jogador, powerups, True)
+        colisoes = pygame.sprite.spritecollide(player.sprite, powerups, True)
         for powerup in colisoes:
             if powerup.tipo == 'vida':
-                jogador.vidas += 1
+                player.sprite.vidas += 1
             elif powerup.tipo == 'pontos':
-                jogador.pontuacao += 50
+                player.sprite.pontuacao += 50
             elif powerup.tipo == 'tiro_duplo':
-                jogador.powerup_tiro_duplo = True
-                jogador.powerup_tiro_triplo = False
-                jogador.tempo_powerup = 0
+                player.sprite.powerup_tiro_duplo = True
+                player.sprite.powerup_tiro_triplo = False
+                player.sprite.tempo_powerup = 0
             elif powerup.tipo == 'tiro_triplo':
-                jogador.powerup_tiro_triplo = True
-                jogador.powerup_tiro_duplo = False
-                jogador.tempo_powerup = 0
+                player.sprite.powerup_tiro_triplo = True
+                player.sprite.powerup_tiro_duplo = False
+                player.sprite.tempo_powerup = 0
         
         #spawn de inimigos ao longo do tempo (só na fase 1)
         if fase_atual == 1:
@@ -365,29 +375,30 @@ while rodando:
     
     tela.blit(cenario, (0, 0))
     todos_sprites.draw(tela)
-    
+    player.draw(tela)
+
     #desenha a barra de vida do chefe se ele estiver vivo
     if spawn_chefe:
         for chefe in chefes:
             chefe.desenhar_barra_vida(tela)
     
     #mostra a pontuação e vidas
-    texto_pontuacao = fonte.render(f"Pontuação: {jogador.pontuacao}", True, BRANCO)
+    texto_pontuacao = fonte.render(f"Pontuação: {player.sprite.pontuacao}", True, BRANCO)
     tela.blit(texto_pontuacao, (10, 10))
     
-    texto_vidas = fonte.render(f"Vidas: {jogador.vidas}", True, BRANCO)
+    texto_vidas = fonte.render(f"Vidas: {player.sprite.vidas}", True, BRANCO)
     tela.blit(texto_vidas, (10, 50))
     
     #mostra powerups ativos
     y_deslocamento = 90
-    if jogador.powerup_tiro_duplo:
-        tempo_restante = max(0, (10000 - jogador.tempo_powerup) // 1000)
+    if player.sprite.powerup_tiro_duplo:
+        tempo_restante = max(0, (10000 - player.sprite.tempo_powerup) // 1000)
         texto_powerup = fonte.render(f"Tiro Duplo: {tempo_restante}s", True, CIANO)
         tela.blit(texto_powerup, (10, y_deslocamento))
         y_deslocamento += 30
     
-    if jogador.powerup_tiro_triplo:
-        tempo_restante = max(0, (10000 - jogador.tempo_powerup) // 1000)
+    if player.sprite.powerup_tiro_triplo:
+        tempo_restante = max(0, (10000 - player.sprite.tempo_powerup) // 1000)
         texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, LARANJA)
         tela.blit(texto_powerup, (10, y_deslocamento))
     
