@@ -1,0 +1,53 @@
+import pygame as pg
+import sys
+
+pg.init()
+screen = pg.display.set_mode((1000, 720))
+pixel_font = pg.font.Font("Src/Pixeltype.ttf", 40)
+
+class Button():
+    def __init__(self, image, x_pos, y_pos, text_input):
+        self.image = image
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.text_input = text_input
+        self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
+        self.font = pixel_font.render(self.text_input, True, "white")
+        self.font_rect = self.font.get_rect(center=(self.x_pos, self.y_pos))
+
+    def update(self):
+        screen.blit(self.image, self.rect)
+        screen.blit(self.font, self.font_rect)
+
+    def verificar_input(self, position):
+        if position[0] in range(self.rect.left, self.rect.right) and \
+           position[1] in range(self.rect.top, self.rect.bottom):
+            print("Botão Pressionado")
+
+    def mudar_cor(self, position):
+        if position[0] in range(self.rect.left, self.rect.right) and \
+           position[1] in range(self.rect.top, self.rect.bottom):
+            self.font = pixel_font.render(self.text_input, True, "green")
+        else:
+            self.font = pixel_font.render(self.text_input, True, "white")
+
+button_surface = pg.image.load("Src/assets/Button.png")
+button_surface = pg.transform.scale(button_surface, (205, 84))
+
+button = Button(button_surface, 400, 300, "Play")
+
+run = True
+while run:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            run = False
+        if event.type == pg.MOUSEBUTTONDOWN:
+            button.verificar_input(pg.mouse.get_pos())
+
+    button.mudar_cor(pg.mouse.get_pos())
+    button.update()
+
+    pg.display.update()
+
+pg.quit()
+sys.exit()
