@@ -31,6 +31,7 @@ class Jogador(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = largura_tela // 2
         self.rect.bottom = altura_tela - 10
+        self.mask = pygame.mask.from_surface(self.image)
         self.velocidade = 8
         self.vidas = 3
         self.delay_tiro = 250  #milissegundos
@@ -209,12 +210,14 @@ tipos = ['1', '2', '3']
 class CometaChefe(Inimigo): # tirar herança
     def __init__(self, x, y):
         super().__init__(random.choice(tipos))
-        self.image = pygame.image.load('spirte_tiro_boss.png')
+        self.image = pygame.image.load('sprite_tiro_boss.png')
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect.centerx = x - 45
         self.rect.centery = y - 50
         self.velocidade_y = 3
         self.velocidade_x = 0
         self.dano = 1
+
 
 #grupos de sprites
 todos_sprites = pygame.sprite.Group()
@@ -281,6 +284,7 @@ while rodando:
             spawn_chefe = True
         
         #colisões entre tiros e inimigos normais
+        # colisoes = pygame.sprite.spritecollide(todos_sprites.player.sprite, inimigos, True, pygame.sprite.collide_mask)
         colisoes = pygame.sprite.groupcollide(inimigos, tiros, True, True)
         for colisao in colisoes:
             jogador.pontuacao += 10
