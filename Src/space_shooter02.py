@@ -7,7 +7,7 @@ pygame.init()
 largura_tela = 1200
 altura_tela = 720
 tela = pygame.display.set_mode((largura_tela, altura_tela))
-cenario = pygame.image.load("background_space.png")
+cenario = pygame.image.load("assets/background_space.png")
 cenario = pygame.transform.scale(cenario, (largura_tela, altura_tela))
 pygame.display.set_caption("Invasores Espaciais")
 relogio = pygame.time.Clock()
@@ -27,7 +27,7 @@ CIANO = (0, 255, 255)
 class Jogador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("nave_player.png")
+        self.image = pygame.image.load("assets/nave_player.png")
         self.rect = self.image.get_rect()
         self.rect.centerx = largura_tela // 2
         self.rect.bottom = altura_tela - 10
@@ -88,9 +88,9 @@ class Jogador(pygame.sprite.Sprite):
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, tipo_cometa):
         super().__init__()
-        dic = {'1': 'cometa_gray.png',
-               '2': 'cometa_gray_2.png',
-               '3': 'cometa_Brown.png'}
+        dic = {'1': 'assets/cometa_gray.png',
+               '2': 'assets/cometa_gray_2.png',
+               '3': 'assets/cometa_Brown.png'}
         self.image = pygame.image.load(dic[tipo_cometa])
         if tipo_cometa == '1' :    
             self.image = pygame.transform.scale_by(self.image, 0.13)
@@ -137,13 +137,13 @@ class PowerUp(pygame.sprite.Sprite):
         self.tipo = tipo
         
         if self.tipo == 'vida':
-            self.image = pygame.transform.scale2x(pygame.image.load('life_up_nave.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/life_up_nave.png'))
         elif self.tipo == 'pontos':
-            self.image = pygame.transform.scale2x(pygame.image.load('50_points.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/50_points.png'))
         elif self.tipo == 'tiro_duplo':
-            self.image = pygame.transform.scale2x(pygame.image.load('tiro_duplo.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_duplo.png'))
         elif self.tipo == 'tiro_triplo':
-            self.image = pygame.transform.scale2x(pygame.image.load('tiro_triplo.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_triplo.png'))
         
         self.rect = self.image.get_rect()
         if x and y:
@@ -163,7 +163,7 @@ class PowerUp(pygame.sprite.Sprite):
 class InimigoChefe(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('sprite_rayquaza.png')
+        self.image = pygame.image.load('assets/sprite_rayquaza.png')
         self.rect = self.image.get_rect()
         self.rect.y = 50
         self.velocidade_x = 3
@@ -209,7 +209,7 @@ tipos = ['1', '2', '3']
 class CometaChefe(pygame.sprite.Sprite): 
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('sprite_tiro_boss.png')
+        self.image = pygame.image.load('assets/sprite_tiro_boss.png')
         self.rect = self.image.get_rect(center=(x,y))
         self.mask = pygame.mask.from_surface(self.image)
         self.velocidade_y = 3
