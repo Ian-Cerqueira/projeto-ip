@@ -399,7 +399,7 @@ while rodando:
     
     if player.sprite.powerup_tiro_triplo:
         tempo_restante = max(0, (10000 - player.sprite.tempo_powerup) // 1000)
-        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, LARANJA)
+        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, VERDE)
         tela.blit(texto_powerup, (10, y_deslocamento))
     
     if jogo_terminado:
