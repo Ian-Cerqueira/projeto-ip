@@ -161,6 +161,8 @@ class PowerUp(pygame.sprite.Sprite):
             self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_duplo.png'))
         elif self.tipo == 'tiro_triplo':
             self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_triplo.png'))
+        elif self.tipo == 'estrela':
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/sprite_estrela.png'))
         
         self.rect = self.image.get_rect()
         if x and y:
@@ -386,8 +388,12 @@ while rodando:
                 colisoes_chefe = pygame.sprite.spritecollide(chefe, tiros, True)
                 for tiro in colisoes_chefe:
                     pygame.mixer.Sound('assets/Explosion1__003.ogg').play()
-                    chefe.vida_atual -= 5  
+                    chefe.vida_atual -= 200  
                     if chefe.vida_atual <= 0:
+                        estrela = PowerUp('estrela')
+                        powerups.add(estrela)
+                        todos_sprites.add(estrela)
+
                         chefe.explosion_death()
                         #chefe.kill()
                         for cometa in inimigos :
