@@ -216,10 +216,10 @@ class InimigoChefe(pygame.sprite.Sprite):
 
     def explosion_death(self): # a ideia é, quando o chefe morrer, parar ele e aplicar umas animações de explosão
         self.velocidade_x = 0    
-        for _ in range (5) : # 5 explosoes
+        for _ in range (10) : # 10 explosoes
             explosao_sprite = Explosao()
             explosao.add(explosao_sprite)
-            pygame.mixer.Sound('assets/Explosion3__005.ogg').play(_)
+        pygame.mixer.Sound('assets/Explosion2__001.ogg').play(2)
         self.image = pygame.image.load('assets/sprite-rayquaza-morto.png')
 
 class Explosao(pygame.sprite.Sprite):
@@ -378,7 +378,7 @@ while rodando:
                 colisoes_chefe = pygame.sprite.spritecollide(chefe, tiros, True)
                 for tiro in colisoes_chefe:
                     pygame.mixer.Sound('assets/Explosion1__003.ogg').play()
-                    chefe.vida_atual -= 5  
+                    chefe.vida_atual -= 1000
                     if chefe.vida_atual <= 0:
                         estrela = PowerUp('estrela')
                         powerups.add(estrela)
