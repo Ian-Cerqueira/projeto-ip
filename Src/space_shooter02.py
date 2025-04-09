@@ -4,10 +4,13 @@ import sys
 
 pygame.init()
 
-largura_tela = 1200
+largura_tela = 1280
 altura_tela = 720
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 cenario = pygame.image.load("assets/background_space.png")
+pygame.mixer.music.load('assets/Generic Spaceshooter Project Original Soundtrack 3.mp3')
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
 cenario = pygame.transform.scale(cenario, (largura_tela, altura_tela))
 pygame.display.set_caption("Invasores Espaciais")
 relogio = pygame.time.Clock()
@@ -292,12 +295,12 @@ while rodando:
             spawn_chefe = True
         
         #colisões entre tiros e inimigos normais
-        # colisoes = pygame.sprite.spritecollide(tiros.sprite, inimigos, True, pygame.sprite.collide_mask)
+
         colisoes = pygame.sprite.groupcollide(inimigos, tiros, True, True)
         for colisao in colisoes:
             player.sprite.pontuacao += 10
-            #chance de dropar um powerup (10%) melhor aumentar até
-            if random.random() < 0.9:
+            #chance de dropar um powerup (30%) melhor aumentar até
+            if random.random() < 0.3:
                 tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
                 powerup = PowerUp(random.choice(tipos_powerup))
                 powerup.rect.centerx = colisao.rect.centerx
