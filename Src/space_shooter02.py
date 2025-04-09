@@ -10,21 +10,10 @@ tela = pygame.display.set_mode((largura_tela, altura_tela))
 cenario = pygame.image.load("assets/background_space.png")
 cenario = pygame.transform.scale(cenario, (largura_tela, altura_tela))
 pygame.mixer.music.load('assets/Generic Spaceshooter Project Original Soundtrack 3.mp3')
-pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(-1)
 pygame.display.set_caption("Invasores Espaciais")
 relogio = pygame.time.Clock()
-
-#cores (podemos transformar num dicionario depois, só pra ficar mais modular)
-BRANCO = (255, 255, 255)
-PRETO = (0, 0, 0)
-VERMELHO = (255, 0, 0)
-AZUL = (0, 0, 255)
-VERDE = (0, 255, 0)
-AMARELO = (255, 255, 0)
-ROXO = (128, 0, 128)
-LARANJA = (255, 165, 0)
-CIANO = (0, 255, 255)
 
 #classe do Jogador
 class Jogador(pygame.sprite.Sprite):
@@ -133,7 +122,7 @@ class Tiro(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image = pygame.Surface((10, 20))
-        self.image.fill(VERDE)
+        self.image.fill((0, 255, 0))
         # self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
@@ -221,9 +210,9 @@ class InimigoChefe(pygame.sprite.Sprite):
         barra_rect = pygame.Rect(self.rect.x + 45, self.rect.y - 15, largura_atual, altura_barra)
         fundo_rect = pygame.Rect(self.rect.x + 45, self.rect.y - 15, largura_barra, altura_barra)
         
-        pygame.draw.rect(superficie, VERMELHO, fundo_rect)
-        pygame.draw.rect(superficie, VERDE, barra_rect)
-        pygame.draw.rect(superficie, BRANCO, fundo_rect, 2)
+        pygame.draw.rect(superficie, (255, 0, 0), fundo_rect) #vermelho
+        pygame.draw.rect(superficie, (0, 255, 0), barra_rect) #verde
+        pygame.draw.rect(superficie, (255, 255, 255), fundo_rect, 2) #branco
 
     def explosion_death(self): # a ideia é, quando o chefe morrer, parar ele e aplicar umas animações de explosão
         self.velocidade_x = 0    
@@ -388,7 +377,7 @@ while rodando:
                 colisoes_chefe = pygame.sprite.spritecollide(chefe, tiros, True)
                 for tiro in colisoes_chefe:
                     pygame.mixer.Sound('assets/Explosion1__003.ogg').play()
-                    chefe.vida_atual -= 200  
+                    chefe.vida_atual -= 5  
                     if chefe.vida_atual <= 0:
                         estrela = PowerUp('estrela')
                         powerups.add(estrela)
@@ -452,6 +441,9 @@ while rodando:
                 player.sprite.powerup_tiro_duplo = False
                 player.sprite.tempo_powerup = 0
                 player.sprite.coletados['tiro_triplo'] += 1
+            
+            elif powerup.tipo == 'estrela':
+                player.sprite.coletados['estrela'] += 1
 
         #spawn de inimigos ao longo do tempo (só na fase 1)
         if fase_atual == 1 and spawn_chefe:
@@ -484,36 +476,42 @@ while rodando:
             chefe.desenhar_barra_vida(tela)
     
     #mostra a pontuação e vidas
-    texto_pontuacao = fonte.render(f"Pontuação: {player.sprite.pontuacao}", True, BRANCO)
+    texto_pontuacao = fonte.render(f"Pontuação: {player.sprite.pontuacao}", True, (255, 255, 255))
     tela.blit(texto_pontuacao, (10, 10))
     
-    texto_vidas = fonte.render(f"Vidas: {player.sprite.vidas}", True, BRANCO)
+    texto_vidas = fonte.render(f"Vidas: {player.sprite.vidas}", True, (255, 255, 255))
     tela.blit(texto_vidas, (10, 50))
 
-    texto_colatado_vida = fonte.render(f"Curou: {player.sprite.coletados['+vida']} vezes", True, BRANCO)
+    texto_colatado_vida = fonte.render(f"Curou: {player.sprite.coletados['+vida']} vezes", True, (255, 255, 255))
     tela.blit(texto_colatado_vida, (1000, 10))
-    texto_colatado_pontos = fonte.render(f"+50_pontos: {player.sprite.coletados['50_pontos']}", True, BRANCO)
+
+    texto_colatado_pontos = fonte.render(f"+50_pontos: {player.sprite.coletados['50_pontos']}", True, (255, 255, 255))
     tela.blit(texto_colatado_pontos, (1000, 40))
-    texto_colatado_duplo = fonte.render(f"Tiro_duplo: {player.sprite.coletados['tiro_duplo']}", True, BRANCO)
+
+    texto_colatado_duplo = fonte.render(f"Tiro_duplo: {player.sprite.coletados['tiro_duplo']}", True, (255, 255, 255))
     tela.blit(texto_colatado_duplo, (1000, 70))
-    texto_colatado_triplo = fonte.render(f"Tiro_triplo: {player.sprite.coletados['tiro_triplo']}", True, BRANCO)
+
+    texto_colatado_triplo = fonte.render(f"Tiro_triplo: {player.sprite.coletados['tiro_triplo']}", True, (255, 255, 255))
     tela.blit(texto_colatado_triplo, (1000, 100))
+
+    texto_colatado_triplo = fonte.render(f"Estrela: {player.sprite.coletados['estrela']}", True, (255, 255, 255))
+    tela.blit(texto_colatado_triplo, (1000, 130))
 
     #mostra powerups ativos
     y_deslocamento = 90
     if player.sprite.powerup_tiro_duplo:
         tempo_restante = max(0, (10000 - player.sprite.tempo_powerup) // 1000)
-        texto_powerup = fonte.render(f"Tiro Duplo: {tempo_restante}s", True, CIANO)
+        texto_powerup = fonte.render(f"Tiro Duplo: {tempo_restante}s", True, (0, 255, 255))
         tela.blit(texto_powerup, (10, y_deslocamento))
         y_deslocamento += 30
     
     if player.sprite.powerup_tiro_triplo:
         tempo_restante = max(0, (10000 - player.sprite.tempo_powerup) // 1000)
-        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, VERDE)
+        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, (0, 255, 0))
         tela.blit(texto_powerup, (10, y_deslocamento))
     
     if jogo_terminado:
-        texto_game_over = fonte.render("FIM DE JOGO! Pressione R para reiniciar", True, VERMELHO)
+        texto_game_over = fonte.render("FIM DE JOGO! Pressione R para reiniciar", True, (255, 0, 0))
         rect_game_over = texto_game_over.get_rect(center=(largura_tela//2, altura_tela//2))
         tela.blit(texto_game_over, rect_game_over)
     
