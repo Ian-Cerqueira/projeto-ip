@@ -117,6 +117,8 @@ class World():
         for bloco in self.lista_bloco:
             tela.blit(bloco[0],bloco[1])
             pygame.draw.rect(tela,(255,255,255), bloco[1], 1)
+#testeeeeeeeeeeeeee
+print("tá bugado po")
 
 #matriz do mapa
 matriz_malha = [
