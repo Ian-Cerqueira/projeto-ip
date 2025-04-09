@@ -221,7 +221,7 @@ class CometaChefe(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.velocidade_y = 3
         self.velocidade_x = 0
-        self.dano = 1
+        self.dano = 2
 
     def update(self):
         self.rect.y += self.velocidade_y
@@ -333,6 +333,8 @@ while rodando:
         #colisoes = pygame.sprite.spritecollide(player.sprite, inimigos, True, pygame.sprite.collide_mask)
         colisoes = pygame.sprite.spritecollide(player.sprite, inimigos, True)
         for colisao in colisoes:
+            pygame.mixer.Sound('Ouch__004.ogg').play()
+            #pygame.mixer.Sound('Ouch__003.ogg').play()
             player.sprite.vidas -= 1
             inimigo = Inimigo(random.choice(tipos))
             todos_sprites.add(inimigo)
@@ -344,6 +346,8 @@ while rodando:
         #colisoes_cometa = pygame.sprite.spritecollide(player.sprite, cometas_chefe, True, pygame.sprite.collide_circle_ratio(0.7))
         colisoes_cometa = pygame.sprite.spritecollide(player.sprite, cometas_chefe, True, pygame.sprite.collide_mask)
         for cometa in colisoes_cometa[:]:
+            pygame.mixer.Sound('Ouch__004.ogg').play()
+            #pygame.mixer.Sound('Ouch__003.ogg').play()
             player.sprite.vidas -= cometa.dano
             if player.sprite.vidas <= 0:
                 jogo_terminado = True
