@@ -378,9 +378,9 @@ while rodando:
                 colisoes_chefe = pygame.sprite.spritecollide(chefe, tiros, True)
                 for tiro in colisoes_chefe:
                     pygame.mixer.Sound('assets/Explosion1__003.ogg').play()
-                    chefe.vida_atual -= 1000
+                    chefe.vida_atual -= 5
                     if chefe.vida_atual <= 0:
-                        estrela = PowerUp('estrela')
+                        estrela = PowerUp('estrela', chefe.rect.centerx, chefe.rect.centery - 30)
                         powerups.add(estrela)
                         todos_sprites.add(estrela)
 
