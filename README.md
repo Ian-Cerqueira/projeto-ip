@@ -33,7 +33,7 @@ A organização do código segue a estrutura modular e POO:
 - **Python** - Linguagem principal do projeto
 - **PyGame** - Framework para desenvolvimento de jogos 2D
 - **GitHub** - Controle de versão e colaboração
-- **Notion/Trello** - Gerenciamento de tarefas e documentação
+- **Notion** - Gerenciamento de tarefas e documentação
 
 ### Justificativas
 
@@ -56,19 +56,20 @@ O PyGame foi escolhido por ser uma biblioteca amplamente utilizada para jogos 2D
    ```
 
 ## 🎮 Capturas de Tela
-
-
+<img src="https://exemplo.com/logo.png" alt="Imagem do Jogo">
+<img src="https://exemplo.com/logo.png" alt="Imagem do Jogo">
+<img src="https://exemplo.com/logo.png" alt="Imagem do Jogo">
 
 ## 📌 Divisão de Tarefas
 
 | Membro       | Responsabilidade                                |
 | ------------ | ----------------------------------------------- |
-| Integrante 1 | Implementação do jogador e movimento            |
-| Integrante 2 | Desenvolvimento dos objetos coletáveis          |
-| Integrante 3 | Sistema de pontuação e exibição de estatísticas |
-| Integrante 4 | Implementação da interface gráfica              |
-| Integrante 5 | Testes e depuração do código                    |
-| Integrante 6 | Documentação e apresentação                     |
+| Arthur       | Implementação do jogador e movimento            |
+| Ian          | Implementação das mecanicas do jogo e boss      |
+| Italo        | Desenvolvimento dos objetos coletáveis          |
+| Maycon       | Implementação da interface gráfic               |
+| Ryan         | Criação do Mapa e Sprites                       |
+| Thiago       | Documentação e organização                      |
 
 ## 📚 Conceitos Aplicados
 
@@ -86,7 +87,7 @@ O PyGame foi escolhido por ser uma biblioteca amplamente utilizada para jogos 2D
 ## 📑 Apresentação
 
 O grupo preparou uma apresentação do projeto que pode ser acessada pelo link:
-[Apresentação do Projeto](https://docs.google.com/presentation/d/SEU-LINK-AQUI)
+[Apresentação do Projeto](https://docs.google.com/presentation/d/1EbtIqT0eTcCLyh2JuYVoYmxZI2saFLZCQdqgh5rBkiI/edit?slide=id.g3429c676cd2_0_100#slide=id.g3429c676cd2_0_100)
 
 ---
 
