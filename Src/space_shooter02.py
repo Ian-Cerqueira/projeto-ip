@@ -220,6 +220,7 @@ class InimigoChefe(pygame.sprite.Sprite):
             explosao_sprite = Explosao()
             explosao.add(explosao_sprite)
             pygame.mixer.Sound('assets/Explosion3__005.ogg').play(_)
+        self.image = pygame.image.load('assets/sprite-rayquaza-morto.png')
 
 class Explosao(pygame.sprite.Sprite):
     def __init__(self) :
