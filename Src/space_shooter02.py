@@ -7,9 +7,9 @@ pygame.init()
 largura_tela = 1200
 altura_tela = 720
 tela = pygame.display.set_mode((largura_tela, altura_tela))
-cenario = pygame.image.load("background_space.png")
+cenario = pygame.image.load("assets/background_space.png")
 cenario = pygame.transform.scale(cenario, (largura_tela, altura_tela))
-pygame.mixer.music.load('Generic Spaceshooter Project Original Soundtrack 3.mp3')
+pygame.mixer.music.load('assets/Generic Spaceshooter Project Original Soundtrack 3.mp3')
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(-1)
 pygame.display.set_caption("Invasores Espaciais")
@@ -30,7 +30,7 @@ CIANO = (0, 255, 255)
 class Jogador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("nave_player.png")
+        self.image = pygame.image.load("assets/nave_player.png")
         self.rect = self.image.get_rect()
         self.rect.centerx = largura_tela // 2
         self.rect.bottom = altura_tela - 10
@@ -43,6 +43,7 @@ class Jogador(pygame.sprite.Sprite):
         self.powerup_tiro_duplo = False
         self.powerup_tiro_triplo = False
         self.tempo_powerup = 0
+        self.coletados = {'+vida': 0, '50_pontos': 0, 'tiro_duplo': 0, 'tiro_triplo': 0, 'estrela': 0}
 
     def update(self):
         teclas = pygame.key.get_pressed()
@@ -61,6 +62,12 @@ class Jogador(pygame.sprite.Sprite):
                 self.powerup_tiro_triplo = False
                 self.tempo_powerup = 0
 
+    def take_hit(self, damage):
+        self.vidas -= damage
+
+    def get_vidas(self):
+        return self.vidas
+
     def atirar(self):
         agora = pygame.time.get_ticks()
         if agora - self.ultimo_tiro > self.delay_tiro:
@@ -69,7 +76,7 @@ class Jogador(pygame.sprite.Sprite):
 
             if self.powerup_tiro_triplo:
                 #tiro triplo em leque
-                pygame.mixer.Sound('Bass Drum__005.ogg').play()
+                pygame.mixer.Sound('assets/Bass Drum__005.ogg').play()
                 for deslocamento in [-20, 0, 20]:
                     tiro = Tiro(self.rect.centerx + deslocamento, self.rect.top)
                     tiro.velocidade_x = deslocamento / 10  #desvio lateral com base no deslocamento
@@ -79,25 +86,28 @@ class Jogador(pygame.sprite.Sprite):
 
             elif self.powerup_tiro_duplo:
                 #tiro duplo
-                pygame.mixer.Sound('Bass Drum__001.ogg').play()
+                pygame.mixer.Sound('assets/Bass Drum__001.ogg').play()
                 for deslocamento in [-15, 15]:
                     tiro = Tiro(self.rect.centerx + deslocamento, self.rect.top)
                     todos_sprites.add(tiro)
                     tiros.add(tiro)
             else:
                 #tiro normal
-                pygame.mixer.Sound('Bass Drum__006.ogg').play()
+                pygame.mixer.Sound('assets/Bass Drum__006.ogg').play()
                 tiro = Tiro(self.rect.centerx, self.rect.top)
                 todos_sprites.add(tiro)
                 tiros.add(tiro)
+
+    def explosion_death(self):
+        pass
 
 #classe dos inimigos (cometas)
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, tipo_cometa):
         super().__init__()
-        dic = {'1': 'cometa_gray.png',
-               '2': 'cometa_gray_2.png',
-               '3': 'cometa_Brown.png'}
+        dic = {'1': 'assets/cometa_gray.png',
+               '2': 'assets/cometa_gray_2.png',
+               '3': 'assets/cometa_Brown.png'}
         self.image = pygame.image.load(dic[tipo_cometa])
         if tipo_cometa == '1' :    
             self.image = pygame.transform.scale_by(self.image, 0.13)
@@ -144,13 +154,13 @@ class PowerUp(pygame.sprite.Sprite):
         self.tipo = tipo
         
         if self.tipo == 'vida':
-            self.image = pygame.transform.scale2x(pygame.image.load('life_up_nave.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/life_up_nave.png'))
         elif self.tipo == 'pontos':
-            self.image = pygame.transform.scale2x(pygame.image.load('50_points.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/50_points.png'))
         elif self.tipo == 'tiro_duplo':
-            self.image = pygame.transform.scale2x(pygame.image.load('tiro_duplo.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_duplo.png'))
         elif self.tipo == 'tiro_triplo':
-            self.image = pygame.transform.scale2x(pygame.image.load('tiro_triplo.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_triplo.png'))
         
         self.rect = self.image.get_rect()
         if x and y:
@@ -170,7 +180,7 @@ class PowerUp(pygame.sprite.Sprite):
 class InimigoChefe(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('sprite_rayquaza.png')
+        self.image = pygame.image.load('assets/sprite_rayquaza.png')
         self.rect = self.image.get_rect()
         self.rect.y = 50
         self.velocidade_x = 3
@@ -192,12 +202,13 @@ class InimigoChefe(pygame.sprite.Sprite):
             self.atirar()
     
     def atirar(self):
-        for angulo in [-30, 0, 30]:
-            cometa = CometaChefe(self.rect.centerx, self.rect.bottom)
-            cometa.velocidade_y = 5
-            cometa.velocidade_x = angulo / 10
-            todos_sprites.add(cometa)
-            cometas_chefe.add(cometa)
+        if self.vida_atual > 0 :
+            for angulo in [-30, 0, 30]:
+                cometa = CometaChefe(self.rect.centerx, self.rect.bottom)
+                cometa.velocidade_y = 5
+                cometa.velocidade_x = angulo / 10
+                todos_sprites.add(cometa)
+                cometas_chefe.add(cometa)
     
     def desenhar_barra_vida(self, superficie):
         largura_barra = 100
@@ -212,11 +223,53 @@ class InimigoChefe(pygame.sprite.Sprite):
         pygame.draw.rect(superficie, VERDE, barra_rect)
         pygame.draw.rect(superficie, BRANCO, fundo_rect, 2)
 
+    def explosion_death(self): # a ideia é, quando o chefe morrer, parar ele e aplicar umas animações de explosão
+        self.velocidade_x = 0    
+        for _ in range (5) : # 5 explosoes
+            explosao_sprite = Explosao()
+            explosao.add(explosao_sprite)
+            pygame.mixer.Sound('assets/Explosion3__005.ogg').play(_)
+
+class Explosao(pygame.sprite.Sprite):
+    def __init__(self) :
+        super().__init__()
+        self.sprite_sheet = pygame.image.load('assets/explosion.png')
+        self.frames = self.get_sprite_sheet(6, self.sprite_sheet)
+        self.image = self.frames[0]
+        self.explosion_index = 0
+        self.rect = self.image.get_rect(center=(random.randint(chefes.sprites()[0].rect.centerx - 80, chefes.sprites()[0].rect.centerx + 80), random.randint(chefes.sprites()[0].rect.centery - 50, chefes.sprites()[0].rect.centery + 50)))
+        self.qtd_explosoes = 5
+
+    def get_sprite_sheet(self, num_frames, sheet):
+        frames = []
+        sheet_width, sheet_height = sheet.get_size()
+        frame_width = sheet_width // num_frames
+        frame_height = sheet_height
+
+        for idx in range(num_frames):
+            frame = sheet.subsurface(pygame.Rect(idx * frame_width, 0, frame_width, frame_height)).copy()
+            scaled_frame = pygame.transform.scale(frame, (frame_width * 2, frame_height * 2))
+            frames.append(scaled_frame)
+            #frames.append(frame)
+        return frames
+
+    def animation_state(self):
+        # Atualiza o índice da animação de forma gradual
+        self.explosion_index += 0.2
+        if self.explosion_index >= len(self.frames):
+            self.explosion_index = 0
+
+        # Atualiza a imagem para o frame atual
+        self.image = self.frames[int(self.explosion_index)]
+
+    def update(self):
+        self.animation_state()
+
 tipos = ['1', '2', '3']
 class CometaChefe(pygame.sprite.Sprite): 
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('sprite_tiro_boss.png')
+        self.image = pygame.image.load('assets/sprite_tiro_boss.png')
         self.rect = self.image.get_rect(center=(x,y))
         self.mask = pygame.mask.from_surface(self.image)
         self.velocidade_y = 3
@@ -230,6 +283,11 @@ class CometaChefe(pygame.sprite.Sprite):
         if self.rect.top > altura_tela + 10 or self.rect.left < -25 or self.rect.right > largura_tela + 25: # modularizar largura e altura da tela
             self.kill()
 
+class Estrela(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        self.image = pygame.image.load('assets/  final-star-removebg-preview.png')
+        self.rect = self.image.get_rect(center=(random.randint(chefes.sprites()[0].rect.centerx, chefes.sprites()[0].rect.centerx), random.randint(chefes.sprites()[0].rect.centery, chefes.sprites()[0].rect.centery)))
+
 #grupos de sprites
 todos_sprites = pygame.sprite.Group()
 inimigos = pygame.sprite.Group()
@@ -238,6 +296,8 @@ powerups = pygame.sprite.Group()
 cometas_chefe = pygame.sprite.Group()
 chefes = pygame.sprite.Group()
 player = pygame.sprite.GroupSingle()
+explosao = pygame.sprite.Group()
+estrela_final = pygame.sprite.Group()
 
 ###
 cometas_chefe.add(CometaChefe(100, 100))
@@ -275,8 +335,10 @@ while rodando:
                 jogo_terminado = False
                 player.sprite.vidas = 3
                 player.sprite.pontuacao = 0
-                spawn_chefe = False
-                player.sprite.powerup_tiro_duplo = False
+                player.sprite.rect.centerx = largura_tela // 2 # morre e volta para o meio da tela
+                player.sprite.rect.bottom = altura_tela - 10
+                spawn_chefe = False # o boss é retirado da tela
+                player.sprite.powerup_tiro_duplo = False # o player perde quaisquer powerup que tinha antes de morrer
                 player.sprite.powerup_tiro_triplo = False
 
                 for sprite in todos_sprites:
@@ -290,6 +352,7 @@ while rodando:
     if not jogo_terminado:
         todos_sprites.update()
         player.sprite.update()
+        explosao.update()
 
         #aparece o chefe quando o jogador alcança 100 pontos
         if player.sprite.pontuacao >= 100 and not spawn_chefe and len(chefes) == 0:
@@ -303,9 +366,9 @@ while rodando:
         colisoes = pygame.sprite.groupcollide(inimigos, tiros, True, True)
         for colisao in colisoes:
             #pygame.mixer.Sound('Explosion1__003.ogg').play()
-            pygame.mixer.Sound('Footstep1__001.ogg').play()
+            pygame.mixer.Sound('assets/Footstep1__001.ogg').play()
             player.sprite.pontuacao += 10
-            #chance de dropar um powerup (10%) melhor aumentar até
+            #chance de dropar um powerup (10%) melhor aumentar até # temporariamente em 90% para facilitar testes
             if random.random() < 0.9:
                 tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
                 powerup = PowerUp(random.choice(tipos_powerup))
@@ -322,58 +385,70 @@ while rodando:
             for chefe in chefes:
                 colisoes_chefe = pygame.sprite.spritecollide(chefe, tiros, True)
                 for tiro in colisoes_chefe:
-                    pygame.mixer.Sound('Explosion1__003.ogg').play()
-                    chefe.vida_atual -= 10
+                    pygame.mixer.Sound('assets/Explosion1__003.ogg').play()
+                    chefe.vida_atual -= 5  
                     if chefe.vida_atual <= 0:
-                        chefe.kill()
+                        chefe.explosion_death()
+                        #chefe.kill()
+                        for cometa in inimigos :
+                            cometa.kill()
                         player.sprite.pontuacao += 100
                         spawn_chefe = False
-                
+                    
         #colisões entre jogador e inimigos normais
         #colisoes = pygame.sprite.spritecollide(player.sprite, inimigos, True, pygame.sprite.collide_mask)
         colisoes = pygame.sprite.spritecollide(player.sprite, inimigos, True)
         for colisao in colisoes:
-            pygame.mixer.Sound('Ouch__004.ogg').play()
+            pygame.mixer.Sound('assets/Ouch__004.ogg').play()
             #pygame.mixer.Sound('Ouch__003.ogg').play()
-            player.sprite.vidas -= 1
+            #player.sprite.vidas -= 1
+            player.sprite.take_hit(1)
             inimigo = Inimigo(random.choice(tipos))
             todos_sprites.add(inimigo)
             inimigos.add(inimigo)
-            if player.sprite.vidas <= 0:
+            if player.sprite.get_vidas() <= 0:
                 jogo_terminado = True
         
         #colisões entre jogador e cometas do chefe
         #colisoes_cometa = pygame.sprite.spritecollide(player.sprite, cometas_chefe, True, pygame.sprite.collide_circle_ratio(0.7))
         colisoes_cometa = pygame.sprite.spritecollide(player.sprite, cometas_chefe, True, pygame.sprite.collide_mask)
-        for cometa in colisoes_cometa[:]:
-            pygame.mixer.Sound('Ouch__004.ogg').play()
+        for cometa in colisoes_cometa:
+            pygame.mixer.Sound('assets/Ouch__004.ogg').play()
             #pygame.mixer.Sound('Ouch__003.ogg').play()
-            player.sprite.vidas -= cometa.dano
-            if player.sprite.vidas <= 0:
+            #player.sprite.vidas -= cometa.dano
+            player.sprite.take_hit(cometa.dano)
+            if player.sprite.get_vidas() <= 0:
                 jogo_terminado = True
         
         #colisões entre jogador e powerups
         colisoes = pygame.sprite.spritecollide(player.sprite, powerups, True)
         for powerup in colisoes:
             if powerup.tipo == 'vida':
-                pygame.mixer.Sound('Powerup__005.ogg').play()
+                pygame.mixer.Sound('assets/Powerup__005.ogg').play()
                 player.sprite.vidas += 1
+                player.sprite.coletados['+vida'] += 1
+
             elif powerup.tipo == 'pontos':
-                pygame.mixer.Sound('Jump__010.ogg').play()
+                pygame.mixer.Sound('assets/Jump__010.ogg').play()
                 player.sprite.pontuacao += 50
+                player.sprite.coletados['50_pontos'] += 1
+
             elif powerup.tipo == 'tiro_duplo':
-                pygame.mixer.Sound('Jump__005.ogg').play()                
+                pygame.mixer.Sound('assets/Jump__005.ogg').play()                
                 player.sprite.powerup_tiro_duplo = True
                 player.sprite.powerup_tiro_triplo = False
                 player.sprite.tempo_powerup = 0
+                player.sprite.coletados['tiro_duplo'] += 1
+
             elif powerup.tipo == 'tiro_triplo':
-                pygame.mixer.Sound('Jump__003.ogg').play()
+                pygame.mixer.Sound('assets/Jump__003.ogg').play()
                 player.sprite.powerup_tiro_triplo = True
                 player.sprite.powerup_tiro_duplo = False
                 player.sprite.tempo_powerup = 0
-        
+                player.sprite.coletados['tiro_triplo'] += 1
+
         #spawn de inimigos ao longo do tempo (só na fase 1)
-        if fase_atual == 1:
+        if fase_atual == 1 and spawn_chefe:
             tempo_spawn += 1
             if tempo_spawn > 60 and len(inimigos) < 10:
                 tempo_spawn = 0
@@ -383,7 +458,7 @@ while rodando:
         
         #spawn de powerups ao longo do tempo
         tempo_powerup += 1
-        if tempo_powerup > 300:
+        if tempo_powerup > 300 and spawn_chefe:
             tempo_powerup = 0
             if random.random() < 0.3:  # 30% de chance
                 tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
@@ -394,6 +469,8 @@ while rodando:
     tela.blit(cenario, (0, 0))
     todos_sprites.draw(tela)
     player.draw(tela)
+    explosao.draw(tela)
+    estrela_final.draw(tela)
 
     #desenha a barra de vida do chefe se ele estiver vivo
     if spawn_chefe:
@@ -406,7 +483,16 @@ while rodando:
     
     texto_vidas = fonte.render(f"Vidas: {player.sprite.vidas}", True, BRANCO)
     tela.blit(texto_vidas, (10, 50))
-    
+
+    texto_colatado_vida = fonte.render(f"Curou: {player.sprite.coletados['+vida']} vezes", True, BRANCO)
+    tela.blit(texto_colatado_vida, (1000, 10))
+    texto_colatado_pontos = fonte.render(f"+50_pontos: {player.sprite.coletados['50_pontos']}", True, BRANCO)
+    tela.blit(texto_colatado_pontos, (1000, 40))
+    texto_colatado_duplo = fonte.render(f"Tiro_duplo: {player.sprite.coletados['tiro_duplo']}", True, BRANCO)
+    tela.blit(texto_colatado_duplo, (1000, 70))
+    texto_colatado_triplo = fonte.render(f"Tiro_triplo: {player.sprite.coletados['tiro_triplo']}", True, BRANCO)
+    tela.blit(texto_colatado_triplo, (1000, 100))
+
     #mostra powerups ativos
     y_deslocamento = 90
     if player.sprite.powerup_tiro_duplo:
@@ -417,7 +503,7 @@ while rodando:
     
     if player.sprite.powerup_tiro_triplo:
         tempo_restante = max(0, (10000 - player.sprite.tempo_powerup) // 1000)
-        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, LARANJA)
+        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, VERDE)
         tela.blit(texto_powerup, (10, y_deslocamento))
     
     if jogo_terminado:
