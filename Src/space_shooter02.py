@@ -4,14 +4,14 @@ import sys
 
 pygame.init()
 
-largura_tela = 1280
+largura_tela = 1200
 altura_tela = 720
 tela = pygame.display.set_mode((largura_tela, altura_tela))
-cenario = pygame.image.load("assets/background_space.png")
-pygame.mixer.music.load('assets/Generic Spaceshooter Project Original Soundtrack 3.mp3')
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1)
+cenario = pygame.image.load("background_space.png")
 cenario = pygame.transform.scale(cenario, (largura_tela, altura_tela))
+pygame.mixer.music.load('Generic Spaceshooter Project Original Soundtrack 3.mp3')
+pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.play(-1)
 pygame.display.set_caption("Invasores Espaciais")
 relogio = pygame.time.Clock()
 
@@ -30,7 +30,7 @@ CIANO = (0, 255, 255)
 class Jogador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("assets/nave_player.png")
+        self.image = pygame.image.load("nave_player.png")
         self.rect = self.image.get_rect()
         self.rect.centerx = largura_tela // 2
         self.rect.bottom = altura_tela - 10
@@ -39,7 +39,7 @@ class Jogador(pygame.sprite.Sprite):
         self.vidas = 99999
         self.delay_tiro = 250  #milissegundos
         self.ultimo_tiro = pygame.time.get_ticks()
-        self.pontuacao = 0
+        self.pontuacao = 100
         self.powerup_tiro_duplo = False
         self.powerup_tiro_triplo = False
         self.tempo_powerup = 0
@@ -66,8 +66,10 @@ class Jogador(pygame.sprite.Sprite):
         if agora - self.ultimo_tiro > self.delay_tiro:
             self.ultimo_tiro = agora
             
+
             if self.powerup_tiro_triplo:
                 #tiro triplo em leque
+                pygame.mixer.Sound('Bass Drum__005.ogg').play()
                 for deslocamento in [-20, 0, 20]:
                     tiro = Tiro(self.rect.centerx + deslocamento, self.rect.top)
                     tiro.velocidade_x = deslocamento / 10  #desvio lateral com base no deslocamento
@@ -77,12 +79,14 @@ class Jogador(pygame.sprite.Sprite):
 
             elif self.powerup_tiro_duplo:
                 #tiro duplo
+                pygame.mixer.Sound('Bass Drum__001.ogg').play()
                 for deslocamento in [-15, 15]:
                     tiro = Tiro(self.rect.centerx + deslocamento, self.rect.top)
                     todos_sprites.add(tiro)
                     tiros.add(tiro)
             else:
                 #tiro normal
+                pygame.mixer.Sound('Bass Drum__006.ogg').play()
                 tiro = Tiro(self.rect.centerx, self.rect.top)
                 todos_sprites.add(tiro)
                 tiros.add(tiro)
@@ -91,9 +95,9 @@ class Jogador(pygame.sprite.Sprite):
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, tipo_cometa):
         super().__init__()
-        dic = {'1': 'assets/cometa_gray.png',
-               '2': 'assets/cometa_gray_2.png',
-               '3': 'assets/cometa_Brown.png'}
+        dic = {'1': 'cometa_gray.png',
+               '2': 'cometa_gray_2.png',
+               '3': 'cometa_Brown.png'}
         self.image = pygame.image.load(dic[tipo_cometa])
         if tipo_cometa == '1' :    
             self.image = pygame.transform.scale_by(self.image, 0.13)
@@ -140,13 +144,13 @@ class PowerUp(pygame.sprite.Sprite):
         self.tipo = tipo
         
         if self.tipo == 'vida':
-            self.image = pygame.transform.scale2x(pygame.image.load('assets/life_up_nave.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('life_up_nave.png'))
         elif self.tipo == 'pontos':
-            self.image = pygame.transform.scale2x(pygame.image.load('assets/50_points.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('50_points.png'))
         elif self.tipo == 'tiro_duplo':
-            self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_duplo.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('tiro_duplo.png'))
         elif self.tipo == 'tiro_triplo':
-            self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_triplo.png'))
+            self.image = pygame.transform.scale2x(pygame.image.load('tiro_triplo.png'))
         
         self.rect = self.image.get_rect()
         if x and y:
@@ -166,7 +170,7 @@ class PowerUp(pygame.sprite.Sprite):
 class InimigoChefe(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('assets/sprite_rayquaza.png')
+        self.image = pygame.image.load('sprite_rayquaza.png')
         self.rect = self.image.get_rect()
         self.rect.y = 50
         self.velocidade_x = 3
@@ -212,7 +216,7 @@ tipos = ['1', '2', '3']
 class CometaChefe(pygame.sprite.Sprite): 
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('assets/sprite_tiro_boss.png')
+        self.image = pygame.image.load('sprite_tiro_boss.png')
         self.rect = self.image.get_rect(center=(x,y))
         self.mask = pygame.mask.from_surface(self.image)
         self.velocidade_y = 3
@@ -237,7 +241,7 @@ player = pygame.sprite.GroupSingle()
 
 ###
 cometas_chefe.add(CometaChefe(100, 100))
-inimigos.add(Inimigo(random.choice(tipos)))
+# inimigos.add(Inimigo(random.choice(tipos)))
 player.add(Jogador())
 
 '''jogador = Jogador()
@@ -295,12 +299,14 @@ while rodando:
             spawn_chefe = True
         
         #colisões entre tiros e inimigos normais
-
+        # colisoes = pygame.sprite.spritecollide(tiros.sprite, inimigos, True, pygame.sprite.collide_mask)
         colisoes = pygame.sprite.groupcollide(inimigos, tiros, True, True)
         for colisao in colisoes:
+            #pygame.mixer.Sound('Explosion1__003.ogg').play()
+            pygame.mixer.Sound('Footstep1__001.ogg').play()
             player.sprite.pontuacao += 10
-            #chance de dropar um powerup (30%) melhor aumentar até
-            if random.random() < 0.3:
+            #chance de dropar um powerup (10%) melhor aumentar até
+            if random.random() < 0.9:
                 tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
                 powerup = PowerUp(random.choice(tipos_powerup))
                 powerup.rect.centerx = colisao.rect.centerx
@@ -316,6 +322,7 @@ while rodando:
             for chefe in chefes:
                 colisoes_chefe = pygame.sprite.spritecollide(chefe, tiros, True)
                 for tiro in colisoes_chefe:
+                    pygame.mixer.Sound('Explosion1__003.ogg').play()
                     chefe.vida_atual -= 10
                     if chefe.vida_atual <= 0:
                         chefe.kill()
@@ -334,7 +341,7 @@ while rodando:
                 jogo_terminado = True
         
         #colisões entre jogador e cometas do chefe
-        # colisoes_cometa = pygame.sprite.spritecollide(jogador, cometas_chefe, True)
+        #colisoes_cometa = pygame.sprite.spritecollide(player.sprite, cometas_chefe, True, pygame.sprite.collide_circle_ratio(0.7))
         colisoes_cometa = pygame.sprite.spritecollide(player.sprite, cometas_chefe, True, pygame.sprite.collide_mask)
         for cometa in colisoes_cometa[:]:
             player.sprite.vidas -= cometa.dano
@@ -345,14 +352,18 @@ while rodando:
         colisoes = pygame.sprite.spritecollide(player.sprite, powerups, True)
         for powerup in colisoes:
             if powerup.tipo == 'vida':
+                pygame.mixer.Sound('Powerup__005.ogg').play()
                 player.sprite.vidas += 1
             elif powerup.tipo == 'pontos':
+                pygame.mixer.Sound('Jump__010.ogg').play()
                 player.sprite.pontuacao += 50
             elif powerup.tipo == 'tiro_duplo':
+                pygame.mixer.Sound('Jump__005.ogg').play()                
                 player.sprite.powerup_tiro_duplo = True
                 player.sprite.powerup_tiro_triplo = False
                 player.sprite.tempo_powerup = 0
             elif powerup.tipo == 'tiro_triplo':
+                pygame.mixer.Sound('Jump__003.ogg').play()
                 player.sprite.powerup_tiro_triplo = True
                 player.sprite.powerup_tiro_duplo = False
                 player.sprite.tempo_powerup = 0
@@ -402,7 +413,7 @@ while rodando:
     
     if player.sprite.powerup_tiro_triplo:
         tempo_restante = max(0, (10000 - player.sprite.tempo_powerup) // 1000)
-        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, VERDE)
+        texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, LARANJA)
         tela.blit(texto_powerup, (10, y_deslocamento))
     
     if jogo_terminado:
