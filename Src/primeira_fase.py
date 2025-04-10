@@ -13,6 +13,9 @@ fps = 100
 fonte = pygame.font.Font(None, 36)
 instante_dano = 0
 game_over = False
+pygame.mixer.music.load('assets/fase_1_soundtrack.mp3')
+pygame.mixer.music.set_volume(0.04)
+pygame.mixer.music.play(-1)
 
 #definição de tela:
 screen_largura = 1000
@@ -200,20 +203,21 @@ while jogo_rodando:
         tela.blit(texto_moedas, (20, 20))
         tela.blit(texto_chave, (20, 50))
         tela.blit(texto_vida, (20, 80))
-
     
-        # Muda o True para False, assim os coletáveis não são removidos automaticamente
         coletados = pygame.sprite.spritecollide(player.sprite, coletaveis, False, pygame.sprite.collide_mask)
         for coletado in coletados:
             if coletado.tipo == 'vida':
-                player.sprite.get_health()
-                coletaveis.remove(coletado)  # remove manualmente
+                if player.sprite.health < 3 :
+                    
+                    player.sprite.get_health()
+                    coletaveis.remove(coletado)  # remove manualmente
             elif coletado.tipo == 'nave' :
                 if player.sprite.inventario['chave'] == 1 :
                     texto_nave = fonte.render("Passou!", True, (0, 255, 0))
                     tela.blit(texto_nave, (screen_largura // 2, screen_altura // 2))
                 # NÃO remove a nave aqui
             else:
+                pygame.mixer.Sound('assets/Powerup__005.ogg').play()
                 player.sprite.add_item(coletado)
                 coletaveis.remove(coletado)  # remove manualmente
 
@@ -223,7 +227,7 @@ while jogo_rodando:
                 if player.sprite.attacking:    
                     inimigo.was_hit = True
                 elif not inimigo.was_hit:
-                    tempo_atual = pygame.time.get_ticks()
+                    tempo_atual = pygame.time.get_ticks() # dá um tempo de 3 segundos de invencibilidade para o player apos tomar um hit
                     if tempo_atual - instante_dano > 3000 : # 3 segundos    
                         player.sprite.take_damage()
                         instante_dano = pygame.time.get_ticks()

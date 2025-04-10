@@ -31,6 +31,9 @@ class Player(pygame.sprite.Sprite):
         self.moving = False
         self.health = 3
         self.dead = False
+        self.step_sound = [pygame.mixer.Sound('assets/Footstep1__009.ogg'), pygame.mixer.Sound('assets/Footstep1__007.ogg')]
+        self.step_idx = 0
+        self.step_channel = pygame.mixer.Channel(1)
         #self.pes_player = pygame.image.load('assets/pes_player.png')
         #self.rect_pes = self.pes_player.get_rect(midbottom=(self.rect.x, self.rect.y))
         self.old_rect = self.rect.copy()
@@ -45,9 +48,10 @@ class Player(pygame.sprite.Sprite):
             self.rect_pes.midtop = (self.rect.centerx+32, self.rect.bottom - 2)
 
     def player_input(self):
-
         keys = pygame.key.get_pressed()
         self.moving = False
+
+        self.rect.x = max(-40, min(self.rect.x, 1000 - self.rect.width))
 
         if keys[pygame.K_w]:
             self.player_jump()
@@ -65,12 +69,14 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE]:
             self.attacking = True
             self.atualizar_rect_pes()
-            
+
             if self.moving:
                 if self.last_pos == 2:
                     self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_attack_left)
                 else:
                     self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_attack_right)
+
+                self.play_step_sound()
 
             else:
                 if self.last_pos == 2:
@@ -80,12 +86,15 @@ class Player(pygame.sprite.Sprite):
         else:
             self.attacking = False
             self.atualizar_rect_pes()
-
+            
             if self.moving:
                 if self.last_pos == 2:
                     self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_left)
                 else:
                     self.frames = self.get_sprite_sheet(6, self.sprite_sheet_run_right)
+            
+                self.play_step_sound()
+            
             else:
                 if self.last_pos == 2:
                     self.frames = self.get_sprite_sheet(4, self.sprite_sheet_idle_left)
@@ -117,6 +126,9 @@ class Player(pygame.sprite.Sprite):
         if not self.jumping :
             self.jumping = True
             self.gravity = -17
+            jump_sound = pygame.mixer.Sound('assets/Jump__005.ogg')
+            jump_sound.set_volume(0.3)
+            jump_sound.play()
 
     def player_attack(self):
         self.attacking = True
@@ -135,13 +147,23 @@ class Player(pygame.sprite.Sprite):
 
     def take_damage(self):
         if self.health > 1 :
+            pygame.mixer.Sound('assets/Snare__001.ogg').play()
             self.health -= 1 # tomou dano
         else:
+            pygame.mixer.Sound('assets/Snare__010.ogg').play()
             self.health = 0
             self.dead = True
 
+    def play_step_sound(self):
+        if not self.jumping:
+            if not self.step_channel.get_busy():
+                self.step_channel.play(self.step_sound[self.step_idx])
+                self.step_channel.set_volume(0.2)
+                self.step_idx = (self.step_idx + 1) % len(self.step_sound)
+
     def get_health(self):
         if self.health < 3 :
+            pygame.mixer.Sound('assets/heal_sound.mp3').play()
             self.health += 1 # pegou um coração e recuperou vida
 
     def display_hearts(self):
@@ -151,11 +173,6 @@ class Player(pygame.sprite.Sprite):
         if item.tipo in self.inventario:
             self.inventario[item.tipo] += 1
             print(f'Coletou {item.tipo}. Inventário: {self.inventario}')
-
-    '''def checkcollisions_x (self):
-        if self.moving :
-            if pygame.Rect.colliderect(self.rect, test_rect):
-                self.rect.x = 200'''
             
     def get_sprite_sheet(self, num_frames, sheet):
         frames = []
@@ -176,6 +193,8 @@ class Player(pygame.sprite.Sprite):
         self.player_index += 0.2
         if self.player_index >= len(self.frames):
             self.player_index = 0
+            if self.attacking :
+                pygame.mixer.Sound('assets/punch_in_air.mp3').play()
 
         # Atualiza a imagem para o frame atual
         self.image = self.frames[int(self.player_index)]
@@ -188,5 +207,3 @@ class Player(pygame.sprite.Sprite):
         self.animation_state()
         self.display_hearts()
         self.atualizar_rect_pes()
-        '''self.checkcollisions_x()'''
-        '''self.checkcollisions_y()'''

@@ -33,6 +33,7 @@ class Foes(pg.sprite.Sprite):
         self.moving = False
         self.was_hit = False
         self.dead = False
+        self.death_sfx = 0
         self.drop = item_dropavel
         self.item_was_drop = False
 
@@ -103,11 +104,16 @@ class Foes(pg.sprite.Sprite):
         else:
             self.image = self.frames[-1]
 
+    def play_death_sound(self) :
+        if self.was_hit and self.death_sfx < 1 :
+            pg.mixer.Sound('assets/Punch1__003.ogg').play()
+            self.death_sfx += 1
 
     def update(self):
         self.enemy_decision()
         self.animation_state()
         self.definir_gravity()
+        self.play_death_sound()
         if self.dead and not self.item_was_drop:
             self.item_was_drop = True
             item = ItemColetavel(self.drop, self.rect.centerx, self.rect.bottom - 50)
