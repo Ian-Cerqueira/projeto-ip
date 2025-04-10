@@ -151,8 +151,6 @@ def jogo_2():
                 self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_duplo.png'))
             elif self.tipo == 'tiro_triplo':
                 self.image = pygame.transform.scale2x(pygame.image.load('assets/tiro_triplo.png'))
-            elif self.tipo == 'estrela':
-                self.image = pygame.transform.scale2x(pygame.image.load('assets/sprite_estrela.png'))
             
             self.rect = self.image.get_rect()
             if x and y:
