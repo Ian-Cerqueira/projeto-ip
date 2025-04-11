@@ -12,7 +12,7 @@ def jogo_2():
     pygame.mixer.music.load('assets/Generic Spaceshooter Project Original Soundtrack 3.mp3')
     pygame.mixer.music.set_volume(0.1)
     pygame.mixer.music.play(-1)
-    pygame.display.set_caption("Invasores Espaciais")
+    pygame.display.set_caption("ChronoCIN")
     relogio = pygame.time.Clock()
 
     #classe do Jogador
@@ -281,7 +281,7 @@ def jogo_2():
 
     def mostrar_sequencia_final():
         final = True
-        imagens = [cena_1, cena_2, cena_3, cena_final]
+        imagens = [cena_1, cena_2, cena_3]
         tempo_por_imagem = 3000  # 3 segundos em milissegundos
         tempo_inicial = pygame.time.get_ticks()
         indice = 0
@@ -536,6 +536,9 @@ def jogo_2():
             tela.blit(texto_game_over, rect_game_over)
         else:
             if jogo_terminado:
+                texto_game_win = fonte.render("VOCÊ GANHOU!", True, (255, 0, 0))
+                rect_game_win = texto_game_win.get_rect(center=(largura_tela//2, altura_tela//2))
+                tela.blit(texto_game_win, rect_game_win)
                 rodando = False
 
         if player.sprite.coletados['estrela'] >= 1:
@@ -545,12 +548,11 @@ def jogo_2():
             cena_2 = pygame.transform.scale(cena_2, (largura_tela, altura_tela))
             cena_3 = pygame.image.load("assets/cena_3.jpg")
             cena_3 = pygame.transform.scale(cena_3, (largura_tela, altura_tela))
-            cena_final = pygame.image.load("assets/imagem_final.png")
-            cena_final = pygame.transform.scale(cena_final, (largura_tela, altura_tela))
             if final == False:
                 mostrar_sequencia_final()
                 jogo_terminado = True
             final = True
+            pygame.mixer.music.stop()
 
         pygame.display.flip()
 
