@@ -28,7 +28,7 @@ def jogo_1():
     tamanho_bloco = 20
 
     #carregar imagens:
-    mapa = pygame.transform.scale(pygame.image.load("assets/11117589.jpg"), ((screen_largura,screen_altura)))
+    mapa = pygame.transform.scale(pygame.image.load("assets/background.jpg"), ((screen_largura,screen_altura)))
     #mapa.fill((51, 19, 60))
     #predios_detalhados = pygame.image.load("assets/prediosdeatalhados.png")
 
