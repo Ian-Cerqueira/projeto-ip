@@ -18,16 +18,20 @@ A organização do código segue a estrutura modular e POO:
 
 ```
 📂 projeto_ip
- ┣ 📂 assets                 # Recursos gráficos e sons
+ ┣ 📂 assets                 # Recursos gráficos
+ ┣ 📂 sounds                 # sons do jogo
  ┣ 📂 src                    # Código-fonte do jogo
  ┃ ┣ 📜 classe_Button.py        # Classe do botao inicio
  ┃ ┣ 📜 coletaveis.py           # Classe dos itens coletáveis
  ┃ ┣ 📜 game.py                 # Arquivo principal para execução
  ┃ ┣ 📜 inimigos.py             # Classe dos inimigos primeira fase
+ ┃ ┣ 📜 lore.py                 # Contextualização da Historia
+ ┃ ┣ 📜 parallex.py             # Tela de Historia
  ┃ ┣ 📜 plataforma.py           # Plataformas primeira fase
  ┃ ┣ 📜 player.py               # Classe do jogador
  ┃ ┣ 📜 primeira_fase.py        # Lógica principal da primeira fase
  ┃ ┣ 📜 space_shooter.py        # Lógica principal da segunda fase
+ ┃ ┣ 📜 typing_text.py          # Texto de Historia
 📜 README.md        # Documentação do projeto
 ```
 
