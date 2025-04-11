@@ -542,11 +542,11 @@ def jogo_2():
                 rodando = False
 
         if player.sprite.coletados['estrela'] >= 1:
-            cena_1 = pygame.image.load("assets/cena_1.jpg")
+            cena_1 = pygame.image.load("assets/cena_1.png")
             cena_1 = pygame.transform.scale(cena_1, (largura_tela, altura_tela))
-            cena_2 = pygame.image.load("assets/cena_2.jpg")
+            cena_2 = pygame.image.load("assets/cena_2.png")
             cena_2 = pygame.transform.scale(cena_2, (largura_tela, altura_tela))
-            cena_3 = pygame.image.load("assets/cena_3.jpg")
+            cena_3 = pygame.image.load("assets/cena_3.png")
             cena_3 = pygame.transform.scale(cena_3, (largura_tela, altura_tela))
             if final == False:
                 mostrar_sequencia_final()
