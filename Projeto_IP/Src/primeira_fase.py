@@ -28,8 +28,8 @@ def jogo_1():
     tamanho_bloco = 20
 
     #carregar imagens:
-    mapa = pygame.image.load("assets/bg_ref.png")
-    #mapa.fill('black')
+    mapa = pygame.transform.scale(pygame.image.load("assets/11117589.jpg"), ((screen_largura,screen_altura)))
+    #mapa.fill((51, 19, 60))
     #predios_detalhados = pygame.image.load("assets/prediosdeatalhados.png")
 
     plataformas = pygame.sprite.Group()
@@ -148,11 +148,11 @@ def jogo_1():
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2],
+        [3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,2,2,2,2,2,2,2,2,2,2,2],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,2,2,2,2],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,3,3,2,2,2,2,2,2,2,2,2,2,2],
@@ -183,10 +183,25 @@ def jogo_1():
 
     mundo = World(matriz_malha)
     jogo_rodando = True
+    tele = pygame.transform.scale_by(pygame.image.load("assets/tv.png"), 0.1)
+    sofa = pygame.transform.scale_by(pygame.image.load("assets/sofa-removebg-preview.png"), 0.1)
+    antenna = pygame.transform.scale_by(pygame.image.load("assets/2.png"), 1.4)
+    poster_0 = pygame.image.load('assets/13.png')
+    poster_1 = pygame.image.load('assets/15.png')
+    poster_2 = pygame.image.load('assets/7.png')
+    poster_3 = pygame.image.load('assets/4.png')
+    poster_4 = pygame.image.load("assets/10.png")
+    box_0 = pygame.image.load("assets/box8.png")
+    box_1 = pygame.image.load("assets/box1.png")
+    grafitti_1 = pygame.transform.scale_by(pygame.image.load("assets/5Greenteam.png"), 1.5)
+    grafitti_2 = pygame.transform.scale_by(pygame.image.load("assets/1Band.png"), 2.2)
+    flipper = pygame.transform.scale_by(pygame.image.load('assets/arcade.png'), 0.25)
 
     while jogo_rodando:
         
-        
+        #limita a taxa de fps
+        clock.tick(fps)
+
         #exibir mapa de fundo
         tela.blit(mapa, (0,0))
 
@@ -202,8 +217,22 @@ def jogo_1():
                     break
             plataformas.draw(tela)
             mundo.draw()
-            pygame.draw.rect(tela, (255, 0, 0), player.sprite.rect_pes, 2)
+            #pygame.draw.rect(tela, (255, 0, 0), player.sprite.rect_pes, 2)
             tela.blit(pygame.transform.scale_by(pygame.image.load("assets/7Dangerarea.png"), 1.5), (70, 617))
+            tela.blit(tele, (535, 100))
+            tela.blit(sofa, (530, 150))
+            tela.blit(antenna, (520, -30))
+            tela.blit(poster_0, (80, 340))
+            tela.blit(poster_1, (20, 340))
+            tela.blit(poster_2, (120, 340))
+            tela.blit(poster_3, (220, 340))
+            tela.blit(grafitti_1, (860, 200))
+            tela.blit(grafitti_2, (500, 260))
+            tela.blit(flipper, (580, 464))
+            tela.blit(poster_4, (460, 464))
+            tela.blit(box_0, (440, 350))
+            tela.blit(box_0, (440, 328))
+            tela.blit(box_0, (472, 350))
             player.draw(tela)
             enemy.draw(tela)
             if dropped_item:
