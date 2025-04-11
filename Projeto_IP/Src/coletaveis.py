@@ -7,7 +7,7 @@ pygame.init()
 SPRITES = {
     'moeda': "assets/coin_cin.png", 
     'chave': "assets/key_nave.png",  
-    'vida': "assets/life_heart.jpeg",  
+    'vida': "assets/heart pixel art 16x16.png",  
     'nave': "assets/nave_fase_1.png"}
 
 class ItemColetavel(pygame.sprite.Sprite):
