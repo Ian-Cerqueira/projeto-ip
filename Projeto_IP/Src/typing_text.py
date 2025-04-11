@@ -10,8 +10,14 @@ class TypingText:
         self.current_text = ""
         self.lines = []
         self.last_update = pg.time.get_ticks()
-
+    
+    def play_music(self):
+        pg.mixer.music.load("sounds/text-effect.mp3")
+        pg.mixer.music.play(-1)
+        
     def update(self):
+        if(self.isFinished()): pg.mixer.music.pause()
+        
         now = pg.time.get_ticks()
         if self.index < len(self.text) and now - self.last_update > 1000 / self.speed:
             self.current_text += self.text[self.index]

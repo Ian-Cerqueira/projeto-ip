@@ -15,6 +15,8 @@ title_font = pg.font.Font("assets/Pixeltype.ttf", 100)
 FPS = 60
 clock = pg.time.Clock()
 
+music = pg.mixer.music.load("sounds/menu-music.mp3")
+
 pg.init()
 
 def primeira_fase():
@@ -32,6 +34,7 @@ def segunda_fase():
 
 def menu():
     
+    pg.mixer.music.play(-1)
     # Carrega o background de menu e ajusta a tela
     tela = pg.display.set_mode((largura_tela, altura_tela))
     menu_background = pg.image.load("assets/background_menu.jpg")

@@ -2,7 +2,7 @@ import pygame as pg
 import sys
 from parallax import ParallaxVertical
 from typing_text import TypingText
-from primeira_fase import jogo_1
+
 
 def scene_lore():
     pg.init()
@@ -23,7 +23,8 @@ def scene_lore():
     space = ParallaxVertical(bg_image, 1, WIDTH, HEIGHT)
     stars = ParallaxVertical(stars_image, 2, WIDTH, HEIGHT)
 
-    lore_text = TypingText(LORE, "courier", 30, 80, WIDTH)
+    lore_text = TypingText(LORE, "courier", 30, 50, WIDTH)
+    lore_text.play_music()
 
     while running:
         clock.tick(FPS)
@@ -32,6 +33,7 @@ def scene_lore():
             if(event.type == pg.QUIT):
                 pg.quit()
             if(event.type == pg.KEYDOWN) and lore_text.isFinished():
+                pg.mixer.music.pause()
                 return True
         
         space.update(screen)
