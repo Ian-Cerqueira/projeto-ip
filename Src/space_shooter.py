@@ -385,9 +385,6 @@ def jogo_2():
                         pygame.mixer.Sound('assets/Explosion1__003.ogg').play()
                         chefe.vida_atual -= 1000
                         if chefe.vida_atual <= 0:
-                            estrela = PowerUp('estrela', chefe.rect.centerx, chefe.rect.centery - 30)
-                            powerups.add(estrela)
-                            todos_sprites.add(estrela)
 
                             chefe.explosion_death()
                             #chefe.kill()
