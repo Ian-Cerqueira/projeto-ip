@@ -18,14 +18,18 @@ A organização do código segue a estrutura modular e POO:
 
 ```
 📂 projeto_ip
- ┣ 📂 assets           # Recursos gráficos e sons
- ┣ 📂 src              # Código-fonte do jogo
- ┃ ┣ 📜 main.py        # Arquivo principal para execução
- ┃ ┣ 📜 player.py      # Classe do jogador
- ┃ ┣ 📜 item.py        # Classe dos itens coletáveis
- ┃ ┣ 📜 game.py        # Lógica principal do jogo
- ┣ 📜 README.md        # Documentação do projeto
- ┣ 📜 requirements.txt # Dependências do projeto
+ ┣ 📂 assets                 # Recursos gráficos e sons
+ ┣ 📂 src                    # Código-fonte do jogo
+ ┃ ┣ 📜 classe_Button.py        # Classe do botao inicio
+ ┃ ┣ 📜 coletaveis.py           # Classe dos itens coletáveis
+ ┃ ┣ 📜 game.py                 # Arquivo principal para execução
+ ┃ ┣ 📜 inimigos.py             # Classe dos inimigos primeira fase
+ ┃ ┣ 📜 plataforma.py           # Plataformas primeira fase
+ ┃ ┣ 📜 player.py               # Classe do jogador
+ ┃ ┣ 📜 plimeira_fase.py        # Lógica principal da primeira fase
+ ┃ ┣ 📜 space_shooter.py        # Lógica principal da segunda fase
+ ┣ 📜 requirements.txt       # Dependências do projeto
+📜 README.md        # Documentação do projeto
 ```
 
 ## 🛠️ Ferramentas e Tecnologias
