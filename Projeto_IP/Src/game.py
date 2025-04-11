@@ -3,6 +3,7 @@ import sys
 from classe_Button import Button
 from primeira_fase import jogo_1
 from space_shooter import jogo_2
+from lore import scene_lore
 
 # Configurações da tela e fonts
 largura_tela = 1000
@@ -17,7 +18,9 @@ clock = pg.time.Clock()
 pg.init()
 
 def primeira_fase():
-    passou_fase = jogo_1()
+    lore = scene_lore()
+    if(lore):
+        passou_fase = jogo_1()
     if passou_fase :
         segunda_fase()
     menu()
