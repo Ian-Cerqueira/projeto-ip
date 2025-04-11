@@ -36,9 +36,9 @@ def jogo_2():
 
         def update(self):
             teclas = pygame.key.get_pressed()
-            if teclas[pygame.K_LEFT]:
+            if teclas[pygame.K_LEFT] or teclas[pygame.K_a]:
                 self.rect.x -= self.velocidade
-            if teclas[pygame.K_RIGHT]:
+            if teclas[pygame.K_RIGHT] or teclas[pygame.K_d]:
                 self.rect.x += self.velocidade
             
             self.rect.x = max(0, min(self.rect.x, largura_tela - self.rect.width))
