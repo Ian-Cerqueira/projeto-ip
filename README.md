@@ -28,7 +28,6 @@ A organização do código segue a estrutura modular e POO:
  ┃ ┣ 📜 player.py               # Classe do jogador
  ┃ ┣ 📜 plimeira_fase.py        # Lógica principal da primeira fase
  ┃ ┣ 📜 space_shooter.py        # Lógica principal da segunda fase
- ┣ 📜 requirements.txt       # Dependências do projeto
 📜 README.md        # Documentação do projeto
 ```
 
@@ -71,7 +70,7 @@ O PyGame foi escolhido por ser uma biblioteca amplamente utilizada para jogos 2D
 | Arthur       | Implementação do jogador e movimento            |
 | Ian          | Implementação das mecanicas do jogo e boss      |
 | Italo        | Desenvolvimento dos objetos coletáveis          |
-| Maycon       | Implementação da interface gráfic               |
+| Maycon       | Implementação da interface gráfica               |
 | Ryan         | Criação do Mapa e Sprites                       |
 | Thiago       | Documentação e organização                      |
 
