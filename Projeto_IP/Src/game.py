@@ -11,6 +11,8 @@ tela = pg.display.set_mode((largura_tela, altura_tela))
 pg.display.set_caption("ChronoCIn")
 pixel_font = pg.font.Font("assets/Pixeltype.ttf", 40)
 title_font = pg.font.Font("assets/Pixeltype.ttf", 100)
+FPS = 60
+clock = pg.time.Clock()
 
 pg.init()
 
@@ -26,8 +28,6 @@ def segunda_fase():
     menu()
 
 def menu():
-
-    clock = pg.time.Clock()
     
     # Carrega o background de menu e ajusta a tela
     tela = pg.display.set_mode((largura_tela, altura_tela))
@@ -72,13 +72,13 @@ def menu():
             button.update()
         
         pg.display.update()
-        clock.tick(60)
     
     pg.quit()
     sys.exit()
 
 run = True
-while run :    
+while run :
+    clock.tick(FPS)    
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False

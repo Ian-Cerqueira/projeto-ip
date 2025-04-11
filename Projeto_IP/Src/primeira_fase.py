@@ -186,9 +186,7 @@ def jogo_1():
 
     while jogo_rodando:
         
-        #limita a taxa de fps
-        clock.tick(fps)
-
+        
         #exibir mapa de fundo
         tela.blit(mapa, (0,0))
 
