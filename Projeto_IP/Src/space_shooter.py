@@ -1,6 +1,5 @@
 import pygame
 import random
-import sys
 
 def jogo_2():
     pygame.init()
@@ -26,10 +25,10 @@ def jogo_2():
             self.rect.bottom = altura_tela - 10
             self.mask = pygame.mask.from_surface(self.image)
             self.velocidade = 8
-            self.vidas = 1
+            self.vidas = 3
             self.delay_tiro = 250  #milissegundos
             self.ultimo_tiro = pygame.time.get_ticks()
-            self.pontuacao = 100
+            self.pontuacao = 0
             self.powerup_tiro_duplo = False
             self.powerup_tiro_triplo = False
             self.tempo_powerup = 0
@@ -111,12 +110,16 @@ def jogo_2():
             self.velocidade_y = random.randrange(1, 5)
             self.velocidade_x = random.randrange(-2, 2)
 
-        def update(self):
+        def update(self,):
             self.rect.y += self.velocidade_y
             self.rect.x += self.velocidade_x
 
             if self.rect.top > altura_tela + 10 or self.rect.left < -25 or self.rect.right > largura_tela + 25:
                 self.kill()
+                if not spawn_chefe:
+                    inimigo = Inimigo(random.choice(tipos))
+                    todos_sprites.add(inimigo)
+                    inimigos.add(inimigo)
 
     #classe dos tiros
     class Tiro(pygame.sprite.Sprite):
@@ -124,6 +127,7 @@ def jogo_2():
             super().__init__()
             self.image = pygame.Surface((10, 20))
             self.image.fill((0, 255, 0))
+            # self.mask = pygame.mask.from_surface(self.image)
             self.rect = self.image.get_rect()
             self.rect.centerx = x
             self.rect.bottom = y
@@ -275,10 +279,23 @@ def jogo_2():
             if self.rect.top > altura_tela + 10 or self.rect.left < -25 or self.rect.right > largura_tela + 25: # modularizar largura e altura da tela
                 self.kill()
 
-    class Estrela(pygame.sprite.Sprite):
-        def __init__(self, x, y):
-            self.image = pygame.image.load('assets/  final-star-removebg-preview.png')
-            self.rect = self.image.get_rect(center=(random.randint(chefes.sprites()[0].rect.centerx, chefes.sprites()[0].rect.centerx), random.randint(chefes.sprites()[0].rect.centery, chefes.sprites()[0].rect.centery)))
+    def mostrar_sequencia_final():
+        final = True
+        imagens = [cena_1, cena_2, cena_3]
+        tempo_por_imagem = 3000  # 3 segundos em milissegundos
+        tempo_inicial = pygame.time.get_ticks()
+        indice = 0
+        
+        while indice < len(imagens):
+            tempo_atual = pygame.time.get_ticks()
+            
+            if tempo_atual - tempo_inicial >= tempo_por_imagem:
+                indice += 1
+                tempo_inicial = tempo_atual
+            
+            if indice < len(imagens):
+                tela.blit(imagens[indice], (0, 0))
+                pygame.display.flip()
 
     #grupos de sprites
     todos_sprites = pygame.sprite.Group()
@@ -291,16 +308,11 @@ def jogo_2():
     explosao = pygame.sprite.Group()
     estrela_final = pygame.sprite.Group()
 
-    ###
     cometas_chefe.add(CometaChefe(100, 100))
-
     player.add(Jogador())
 
-    '''jogador = Jogador()
-    todos_sprites.add(jogador)'''
-
     #cria inimigos iniciais
-    for i in range(8):
+    for i in range(15):
         inimigo = Inimigo(random.choice(tipos))
         todos_sprites.add(inimigo)
         inimigos.add(inimigo)
@@ -310,7 +322,8 @@ def jogo_2():
     jogo_terminado = False
     spawn_chefe = False
     fase_atual = 1
-    fonte = pygame.font.SysFont('Arial', 30)
+    final = False
+    fonte = pygame.font.Font(None, 36)
 
     #loop principal
     rodando = True
@@ -336,7 +349,7 @@ def jogo_2():
 
                     for sprite in todos_sprites:
                         sprite.kill()
-
+                    
                     for i in range(8):
                         inimigo = Inimigo(random.choice(tipos))
                         todos_sprites.add(inimigo)
@@ -364,8 +377,8 @@ def jogo_2():
             for colisao in colisoes:
                 pygame.mixer.Sound('assets/Footstep1__001.ogg').play()
                 player.sprite.pontuacao += 10
-                #chance de dropar um powerup (10%) melhor aumentar até # temporariamente em 90% para facilitar testes
-                if random.random() < 0.9:
+                #chance de dropar um powerup (40%) 
+                if random.random() < 0.4:
                     tipos_powerup = ['vida', 'pontos', 'tiro_duplo', 'tiro_triplo']
                     powerup = PowerUp(random.choice(tipos_powerup))
                     powerup.rect.centerx = colisao.rect.centerx
@@ -382,14 +395,14 @@ def jogo_2():
                     colisoes_chefe = pygame.sprite.spritecollide(chefe, tiros, True)
                     for tiro in colisoes_chefe:
                         pygame.mixer.Sound('assets/Explosion1__003.ogg').play()
-                        chefe.vida_atual -= 1000
+                        chefe.vida_atual -= 10
                         if chefe.vida_atual <= 0:
                             estrela = PowerUp('estrela', chefe.rect.centerx, chefe.rect.centery - 30)
                             powerups.add(estrela)
                             todos_sprites.add(estrela)
 
                             chefe.explosion_death()
-                            #chefe.kill()
+
                             for cometa in inimigos :
                                 cometa.kill()
                             for tiros_chefe in cometas_chefe :
@@ -399,13 +412,14 @@ def jogo_2():
                                     power.kill()
                             player.sprite.pontuacao += 100
                             spawn_chefe = False
-                        
+
             #colisões entre jogador e inimigos normais
+
             colisoes = pygame.sprite.spritecollide(player.sprite, inimigos, True)
+
             for colisao in colisoes:
+
                 pygame.mixer.Sound('assets/Ouch__004.ogg').play()
-                #pygame.mixer.Sound('Ouch__003.ogg').play()
-                #player.sprite.vidas -= 1
                 player.sprite.take_hit(1)
                 inimigo = Inimigo(random.choice(tipos))
                 todos_sprites.add(inimigo)
@@ -485,7 +499,7 @@ def jogo_2():
         texto_pontuacao = fonte.render(f"Pontuação: {player.sprite.pontuacao}", True, (255, 255, 255))
         tela.blit(texto_pontuacao, (10, 10))
         
-        texto_vidas = fonte.render(f"Vidas: {player.sprite.vidas}", True, (255, 255, 255))
+        texto_vidas = fonte.render(f"Vidas: {player.sprite.vidas}", True, (0, 255, 0))
         tela.blit(texto_vidas, (10, 50))
 
         texto_colatado_vida = fonte.render(f"Curou: {player.sprite.coletados['+vida']} vezes", True, (255, 255, 255))
@@ -516,9 +530,29 @@ def jogo_2():
             texto_powerup = fonte.render(f"Tiro Triplo: {tempo_restante}s", True, (0, 255, 0))
             tela.blit(texto_powerup, (10, y_deslocamento))
         
-        if jogo_terminado:
+        if jogo_terminado and player.sprite.vidas <= 0:
             texto_game_over = fonte.render("FIM DE JOGO! Pressione R para reiniciar", True, (255, 0, 0))
             rect_game_over = texto_game_over.get_rect(center=(largura_tela//2, altura_tela//2))
             tela.blit(texto_game_over, rect_game_over)
-        
+        else:
+            if jogo_terminado:
+                texto_game_win = fonte.render("VOCÊ GANHOU!", True, (255, 0, 0))
+                rect_game_win = texto_game_win.get_rect(center=(largura_tela//2, altura_tela//2))
+                tela.blit(texto_game_win, rect_game_win)
+                rodando = False
+
+        if player.sprite.coletados['estrela'] >= 1:
+            cena_1 = pygame.image.load("assets/cena_1.jpg")
+            cena_1 = pygame.transform.scale(cena_1, (largura_tela, altura_tela))
+            cena_2 = pygame.image.load("assets/cena_2.jpg")
+            cena_2 = pygame.transform.scale(cena_2, (largura_tela, altura_tela))
+            cena_3 = pygame.image.load("assets/cena_3.jpg")
+            cena_3 = pygame.transform.scale(cena_3, (largura_tela, altura_tela))
+            if final == False:
+                mostrar_sequencia_final()
+                jogo_terminado = True
+            final = True
+
         pygame.display.flip()
+
+#jogo_2()
