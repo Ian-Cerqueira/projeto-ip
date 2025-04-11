@@ -26,7 +26,7 @@ A organização do código segue a estrutura modular e POO:
  ┃ ┣ 📜 inimigos.py             # Classe dos inimigos primeira fase
  ┃ ┣ 📜 plataforma.py           # Plataformas primeira fase
  ┃ ┣ 📜 player.py               # Classe do jogador
- ┃ ┣ 📜 plimeira_fase.py        # Lógica principal da primeira fase
+ ┃ ┣ 📜 primeira_fase.py        # Lógica principal da primeira fase
  ┃ ┣ 📜 space_shooter.py        # Lógica principal da segunda fase
 📜 README.md        # Documentação do projeto
 ```
