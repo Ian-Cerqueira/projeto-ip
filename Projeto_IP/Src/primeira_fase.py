@@ -6,6 +6,8 @@ from plataforma import Plataforma
 from player import Player
 from inimigos import Foes
 from coletaveis import ItemColetavel
+from res_p import resource_path
+import os
 
 #definir taxa de quadros
 def jogo_1():
@@ -14,7 +16,7 @@ def jogo_1():
     fonte = pygame.font.Font(None, 36)
     instante_dano = 0
     game_over = False
-    pygame.mixer.music.load('assets/fase_1_soundtrack.mp3')
+    pygame.mixer.music.load(resource_path(os.path.join('assets/fase_1_soundtrack.mp3')))
     pygame.mixer.music.set_volume(0.04)
     pygame.mixer.music.play(-1)
 
@@ -28,7 +30,7 @@ def jogo_1():
     tamanho_bloco = 20
 
     #carregar imagens:
-    mapa = pygame.transform.scale(pygame.image.load("assets/background.jpg"), ((screen_largura,screen_altura)))
+    mapa = pygame.transform.scale(pygame.image.load(resource_path(os.path.join("assets/background.jpg"))), ((screen_largura,screen_altura)))
     #mapa.fill((51, 19, 60))
     #predios_detalhados = pygame.image.load("assets/prediosdeatalhados.png")
 
@@ -105,9 +107,9 @@ def jogo_1():
         def __init__(self, data):
             self.lista_bloco = []
             #carregar imagem
-            plataforma_sombra = pygame.image.load("assets/Tile_02_sombra.png")
-            plataforma_sem_sombra = pygame.image.load("assets/Tile_02.png")
-            parede = pygame.image.load("assets/Tile_10.png")
+            plataforma_sombra = pygame.image.load(resource_path(os.path.join("assets/Tile_02_sombra.png")))
+            plataforma_sem_sombra = pygame.image.load(resource_path(os.path.join("assets/Tile_02.png")))
+            parede = pygame.image.load(resource_path(os.path.join("assets/Tile_10.png")))
             linha_count = 0
             for linha in data:
                 col_count = 0
@@ -183,19 +185,19 @@ def jogo_1():
 
     mundo = World(matriz_malha)
     jogo_rodando = True
-    tele = pygame.transform.scale_by(pygame.image.load("assets/tv.png"), 0.1)
-    sofa = pygame.transform.scale_by(pygame.image.load("assets/sofa-removebg-preview.png"), 0.1)
-    antenna = pygame.transform.scale_by(pygame.image.load("assets/2.png"), 1.4)
-    poster_0 = pygame.image.load('assets/13.png')
-    poster_1 = pygame.image.load('assets/15.png')
-    poster_2 = pygame.image.load('assets/7.png')
-    poster_3 = pygame.image.load('assets/4.png')
-    poster_4 = pygame.image.load("assets/10.png")
-    box_0 = pygame.image.load("assets/box8.png")
-    box_1 = pygame.image.load("assets/box1.png")
-    grafitti_1 = pygame.transform.scale_by(pygame.image.load("assets/5Greenteam.png"), 1.5)
-    grafitti_2 = pygame.transform.scale_by(pygame.image.load("assets/1Band.png"), 2.2)
-    flipper = pygame.transform.scale_by(pygame.image.load('assets/arcade.png'), 0.25)
+    tele = pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join("assets/tv.png"))), 0.1)
+    sofa = pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join("assets/sofa-removebg-preview.png"))), 0.1)
+    antenna = pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join("assets/2.png"))), 1.4)
+    poster_0 = pygame.image.load(resource_path(os.path.join('assets/13.png')))
+    poster_1 = pygame.image.load(resource_path(os.path.join('assets/15.png')))
+    poster_2 = pygame.image.load(resource_path(os.path.join('assets/7.png')))
+    poster_3 = pygame.image.load(resource_path(os.path.join('assets/4.png')))
+    poster_4 = pygame.image.load(resource_path(os.path.join("assets/10.png")))
+    box_0 = pygame.image.load(resource_path(os.path.join("assets/box8.png")))
+    box_1 = pygame.image.load(resource_path(os.path.join("assets/box1.png")))
+    grafitti_1 = pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join("assets/5Greenteam.png"))), 1.5)
+    grafitti_2 = pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join("assets/1Band.png"))), 2.2)
+    flipper = pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join('assets/arcade.png'))), 0.25)
 
     while jogo_rodando:
         
@@ -218,7 +220,7 @@ def jogo_1():
             plataformas.draw(tela)
             mundo.draw()
             #pygame.draw.rect(tela, (255, 0, 0), player.sprite.rect_pes, 2)
-            tela.blit(pygame.transform.scale_by(pygame.image.load("assets/7Dangerarea.png"), 1.5), (70, 617))
+            tela.blit(pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join("assets/7Dangerarea.png"))), 1.5), (70, 617))
             tela.blit(tele, (535, 100))
             tela.blit(sofa, (530, 150))
             tela.blit(antenna, (520, -30))
@@ -264,7 +266,7 @@ def jogo_1():
                         return True
                     # NÃO remove a nave aqui
                 else:
-                    pygame.mixer.Sound('assets/Powerup__005.ogg').play()
+                    pygame.mixer.Sound(resource_path(os.path.join('assets/Powerup__005.ogg'))).play()
                     player.sprite.add_item(coletado)
                     coletaveis.remove(coletado)  # remove manualmente
 

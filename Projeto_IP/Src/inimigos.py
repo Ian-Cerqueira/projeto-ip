@@ -1,6 +1,8 @@
 import pygame as pg
 from coletaveis import ItemColetavel
 import random
+import os
+from res_p import resource_path
 
 pg.init()
 
@@ -10,13 +12,13 @@ class Foes(pg.sprite.Sprite):
     def __init__(self, velocidade, pos_x, pos_y, left_limit, right_limit, item_dropavel):
         super().__init__()
         escolha_inimigo = random.randint(0, 1)
-        self.sprite_sheet_run_right = pg.image.load(f"assets/{inimigos[escolha_inimigo]}_run.png").convert_alpha()
+        self.sprite_sheet_run_right = pg.image.load(resource_path(os.path.join(f"assets/{inimigos[escolha_inimigo]}_run.png"))).convert_alpha()
         self.sprite_sheet_run_left = pg.transform.flip(self.sprite_sheet_run_right, True, False)
-        self.sprite_sheet_idle_right = pg.image.load(f"assets/{inimigos[escolha_inimigo]}_idle.png").convert_alpha()
+        self.sprite_sheet_idle_right = pg.image.load(resource_path(os.path.join(f"assets/{inimigos[escolha_inimigo]}_idle.png"))).convert_alpha()
         self.sprite_sheet_idle_left = pg.transform.flip(self.sprite_sheet_idle_right, True, False)
-        self.sprite_sheet_idle_attack_right = pg.image.load(f"assets/{inimigos[escolha_inimigo]}_punch.png").convert_alpha()
+        self.sprite_sheet_idle_attack_right = pg.image.load(resource_path(os.path.join(f"assets/{inimigos[escolha_inimigo]}_punch.png"))).convert_alpha()
         self.sprite_sheet_idle_attack_left = pg.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
-        self.sprite_sheet_death = pg.image.load(f"assets/{inimigos[escolha_inimigo]}_death.png").convert_alpha()
+        self.sprite_sheet_death = pg.image.load(resource_path(os.path.join(f"assets/{inimigos[escolha_inimigo]}_death.png"))).convert_alpha()
 
         self.speed = velocidade
         # nao tem inventario
@@ -106,7 +108,7 @@ class Foes(pg.sprite.Sprite):
 
     def play_death_sound(self) :
         if self.was_hit and self.death_sfx < 1 :
-            pg.mixer.Sound('assets/Punch1__003.ogg').play()
+            pg.mixer.Sound(resource_path(os.path.join('assets/Punch1__003.ogg'))).play()
             self.death_sfx += 1
 
     def update(self):

@@ -1,4 +1,6 @@
 import pygame as pg
+from res_p import resource_path
+import os
 
 class TypingText:
     def __init__(self, text, font, size, speed, max_width):
@@ -12,7 +14,7 @@ class TypingText:
         self.last_update = pg.time.get_ticks()
     
     def play_music(self):
-        pg.mixer.music.load("sounds/text-effect.mp3")
+        pg.mixer.music.load(resource_path(os.path.join("sounds/text-effect.mp3")))
         pg.mixer.music.play(-1)
         
     def update(self):

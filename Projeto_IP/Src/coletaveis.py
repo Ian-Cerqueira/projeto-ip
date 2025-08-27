@@ -1,6 +1,8 @@
 import pygame
 from random import randint
 from sys import exit
+from res_p import resource_path
+import os
 
 pygame.init()
 
@@ -15,12 +17,12 @@ class ItemColetavel(pygame.sprite.Sprite):
         super().__init__()
         self.tipo = tipo
         if self.tipo == 'moeda' :
-            self.image = pygame.transform.scale2x(pygame.image.load(SPRITES[tipo]))
+            self.image = pygame.transform.scale2x(pygame.image.load(resource_path(os.path.join(SPRITES[tipo]))))
         elif self.tipo == 'vida' :
-            self.image = pygame.transform.scale2x(pygame.image.load(SPRITES[tipo]))
+            self.image = pygame.transform.scale2x(pygame.image.load(resource_path(os.path.join(SPRITES[tipo]))))
         elif self.tipo == 'nave' :
-            self.image = pygame.transform.flip(pygame.transform.scale_by(pygame.image.load(SPRITES[tipo]), 0.4), True, False)
+            self.image = pygame.transform.flip(pygame.transform.scale_by(pygame.image.load(resource_path(os.path.join(SPRITES[tipo]))), 0.4), True, False)
         else:
-            self.image = pygame.image.load(SPRITES[tipo])
+            self.image = pygame.image.load(resource_path(os.path.join(SPRITES[tipo])))
         self.rect = self.image.get_rect(topleft=(loc_x, loc_y))
         self.mask = pygame.mask.from_surface(self.image)

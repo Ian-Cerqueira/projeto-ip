@@ -2,7 +2,8 @@ import pygame as pg
 import sys
 from parallax import ParallaxVertical
 from typing_text import TypingText
-
+from res_p import resource_path
+import os
 
 def scene_lore():
     pg.init()
@@ -16,8 +17,8 @@ def scene_lore():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     title = pg.display.set_caption("ChronoCIN")
     clock = pg.time.Clock()
-    bg_image = pg.image.load("assets/space.png")
-    stars_image = pg.image.load("assets/stars.png")                                                   
+    bg_image = pg.image.load(resource_path(os.path.join("assets/space.png")))
+    stars_image = pg.image.load(resource_path(os.path.join("assets/stars.png")))
     running = 1
 
     space = ParallaxVertical(bg_image, 1, WIDTH, HEIGHT)

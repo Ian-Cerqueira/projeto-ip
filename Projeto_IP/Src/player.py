@@ -1,19 +1,21 @@
 import pygame
+import os
+from res_p import resource_path
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, velocidade):
         super().__init__()
 
         # Carrega as sprite sheets
-        self.sprite_sheet_run_right = pygame.image.load("assets/RunRight.png").convert_alpha()
+        self.sprite_sheet_run_right = pygame.image.load(resource_path(os.path.join("assets/RunRight.png"))).convert_alpha()
         self.sprite_sheet_run_left = pygame.transform.flip(self.sprite_sheet_run_right, True, False)
-        self.sprite_sheet_idle_right = pygame.image.load("assets/IdleRight.png").convert_alpha()
+        self.sprite_sheet_idle_right = pygame.image.load(resource_path(os.path.join("assets/IdleRight.png"))).convert_alpha()
         self.sprite_sheet_idle_left = pygame.transform.flip(self.sprite_sheet_idle_right, True, False)
-        self.sprite_sheet_idle_attack_right = pygame.image.load("assets/Idle_Attack.png").convert_alpha()
+        self.sprite_sheet_idle_attack_right = pygame.image.load(resource_path(os.path.join("assets/Idle_Attack.png"))).convert_alpha()
         self.sprite_sheet_idle_attack_left = pygame.transform.flip(self.sprite_sheet_idle_attack_right, True, False)
-        self.sprite_sheet_run_attack_right = pygame.image.load("assets/Run_attack.png").convert_alpha()
+        self.sprite_sheet_run_attack_right = pygame.image.load(resource_path(os.path.join("assets/Run_attack.png"))).convert_alpha()
         self.sprite_sheet_run_attack_left = pygame.transform.flip(self.sprite_sheet_run_attack_right, True, False)
-        self.sprite_sheet_idle_jump_right = pygame.image.load("assets/Cyborg_jump.png").convert_alpha()
+        self.sprite_sheet_idle_jump_right = pygame.image.load(resource_path(os.path.join("assets/Cyborg_jump.png"))).convert_alpha()
         self.sprite_sheet_idle_jump_left = pygame.transform.flip(self.sprite_sheet_idle_jump_right, True, False)
 
         self.speed = velocidade
@@ -30,7 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.moving = False
         self.health = 3
         self.dead = False
-        self.step_sound = [pygame.mixer.Sound('assets/Footstep1__009.ogg'), pygame.mixer.Sound('assets/Footstep1__007.ogg')]
+        self.step_sound = [pygame.mixer.Sound(resource_path(os.path.join('assets/Footstep1__009.ogg'))), pygame.mixer.Sound(resource_path(os.path.join('assets/Footstep1__007.ogg')))]
         self.step_idx = 0
         self.step_channel = pygame.mixer.Channel(1)
         self.old_rect = self.rect.copy()
@@ -123,7 +125,7 @@ class Player(pygame.sprite.Sprite):
         if not self.jumping :
             self.jumping = True
             self.gravity = -17
-            jump_sound = pygame.mixer.Sound('assets/Jump__005.ogg')
+            jump_sound = pygame.mixer.Sound(resource_path(os.path.join('assets/Jump__005.ogg')))
             jump_sound.set_volume(0.3)
             jump_sound.play()
 
@@ -144,10 +146,10 @@ class Player(pygame.sprite.Sprite):
 
     def take_damage(self):
         if self.health > 1 :
-            pygame.mixer.Sound('assets/Snare__001.ogg').play()
+            pygame.mixer.Sound(resource_path(os.path.join('assets/Snare__001.ogg'))).play()
             self.health -= 1 # tomou dano
         else:
-            pygame.mixer.Sound('assets/Snare__010.ogg').play()
+            pygame.mixer.Sound(resource_path(os.path.join('assets/Snare__010.ogg'))).play()
             self.health = 0
             self.dead = True
 
@@ -160,7 +162,7 @@ class Player(pygame.sprite.Sprite):
 
     def get_health(self):
         if self.health < 3 :
-            pygame.mixer.Sound('assets/heal_sound.mp3').play()
+            pygame.mixer.Sound(resource_path(os.path.join('assets/heal_sound.mp3'))).play()
             self.health += 1 # pegou um coração e recuperou vida
 
     def display_hearts(self):
@@ -191,7 +193,7 @@ class Player(pygame.sprite.Sprite):
         if self.player_index >= len(self.frames):
             self.player_index = 0
             if self.attacking :
-                pygame.mixer.Sound('assets/punch_in_air.mp3').play()
+                pygame.mixer.Sound(resource_path(os.path.join('assets/punch_in_air.mp3'))).play()
 
         # Atualiza a imagem para o frame atual
         self.image = self.frames[int(self.player_index)]

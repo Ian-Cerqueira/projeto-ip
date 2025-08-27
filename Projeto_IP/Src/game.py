@@ -4,18 +4,20 @@ from classe_Button import Button
 from primeira_fase import jogo_1
 from space_shooter import jogo_2
 from lore import scene_lore
+from res_p import resource_path
+import os
 
 # Configurações da tela e fonts
 largura_tela = 1000
 altura_tela = 720
 tela = pg.display.set_mode((largura_tela, altura_tela))
 pg.display.set_caption("ChronoCIn")
-pixel_font = pg.font.Font("assets/Pixeltype.ttf", 40)
-title_font = pg.font.Font("assets/Pixeltype.ttf", 100)
+pixel_font = pg.font.Font(resource_path(os.path.join("assets/Pixeltype.ttf")), 40)
+title_font = pg.font.Font(resource_path(os.path.join("assets/Pixeltype.ttf")), 100)
 FPS = 60
 clock = pg.time.Clock()
 
-music = pg.mixer.music.load("sounds/menu-music.mp3")
+music = pg.mixer.music.load(resource_path(os.path.join("sounds/menu-music.mp3")))
 
 pg.init()
 
@@ -37,7 +39,7 @@ def menu():
     pg.mixer.music.play(-1)
     # Carrega o background de menu e ajusta a tela
     tela = pg.display.set_mode((largura_tela, altura_tela))
-    menu_background = pg.image.load("assets/background_menu.jpg")
+    menu_background = pg.image.load(resource_path(os.path.join("assets/background_menu.jpg")))
     menu_background = pg.transform.scale(menu_background, (largura_tela, altura_tela))
     
     # Renderiza o título do menu
@@ -45,7 +47,7 @@ def menu():
     menu_text_rect = menu_text.get_rect(center=(500, 80))
     
     # Carrega a imagem do botão e redimensiona
-    button_image = pg.image.load("assets/Button.png")
+    button_image = pg.image.load(resource_path(os.path.join("assets/Button.png")))
     button_image = pg.transform.scale(button_image, (205, 84))
     
     # Cria os botões Play e Quit

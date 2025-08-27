@@ -1,9 +1,11 @@
 import pygame as pg
 import sys
+import os
+from res_p import resource_path
 
 pg.init()
 screen = pg.display.set_mode((1000, 720))
-pixel_font = pg.font.Font("assets/Pixeltype.ttf", 40)
+pixel_font = pg.font.Font(resource_path(os.path.join("assets", "Pixeltype.ttf")), 40)
 
 class Button():
     def __init__(self, image, x_pos, y_pos, text_input):
@@ -31,5 +33,5 @@ class Button():
         else:
             self.font = pixel_font.render(self.text_input, True, "white")
 
-button_surface = pg.image.load("assets/Button.png")
+button_surface = pg.image.load(resource_path(os.path.join("assets/Button.png")))
 button_surface = pg.transform.scale(button_surface, (205, 84))
